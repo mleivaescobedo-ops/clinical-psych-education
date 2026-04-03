@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PsicoEduc — Psicología Clínica & Educación Superior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0f0f;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --rust: #c4522a;
+    --sage: #4a6741;
+    --slate: #3d4f6b;
+    --gold: #b89a3e;
+    --muted: #7a7268;
+    --border: rgba(15,15,15,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER / NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(245, 240, 232, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo span { color: var(--rust); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--rust); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 10%;
+    width: 55%;
+    height: 80%;
+    background: radial-gradient(ellipse at center, rgba(196,82,42,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--rust);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 1.02;
+    letter-spacing: -2px;
+    margin-bottom: 1.8rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-body {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 46ch;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+
+  .btn-ghost {
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-ghost:hover { border-color: var(--rust); color: var(--rust); }
+
+  .hero-visual {
+    position: relative;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .stat-card:nth-child(1) { animation-delay: 0.2s; }
+  .stat-card:nth-child(2) { animation-delay: 0.4s; margin-left: 2rem; }
+  .stat-card:nth-child(3) { animation-delay: 0.6s; margin-left: 1rem; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .stat-card.rust::before { background: var(--rust); }
+  .stat-card.sage::before { background: var(--sage); }
+  .stat-card.slate::before { background: var(--slate); }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 6rem 3rem;
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-tag::after {
+    content: '';
+    flex: 1;
+    max-width: 3rem;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  h2 em { font-style: italic; color: var(--rust); }
+
+  .section-intro {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 55ch;
+    line-height: 1.75;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── AUTHORS GRID ── */
+  #autores { background: var(--cream); }
+
+  .authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .author-card {
+    background: var(--cream);
+    padding: 1.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .author-card:hover {
+    background: white;
+  }
+
+  .author-card:hover .author-arrow { opacity: 1; transform: translateX(0); }
+
+  .author-framework {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  .fw-tcc { background: rgba(196,82,42,0.1); color: var(--rust); }
+  .fw-social { background: rgba(74,103,65,0.1); color: var(--sage); }
+  .fw-humanismo { background: rgba(61,79,107,0.1); color: var(--slate); }
+  .fw-apego { background: rgba(184,154,62,0.1); color: var(--gold); }
+  .fw-neuro { background: rgba(15,15,15,0.07); color: var(--muted); }
+  .fw-dbt { background: rgba(196,82,42,0.08); color: var(--rust); }
+  .fw-existencial { background: rgba(61,79,107,0.08); color: var(--slate); }
+  .fw-relacional { background: rgba(74,103,65,0.08); color: var(--sage); }
+  .fw-socio { background: rgba(184,154,62,0.08); color: var(--gold); }
+
+  .author-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.3rem;
+  }
+
+  .author-years {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  .author-concept {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .author-relevance {
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .rel-alta { color: var(--sage); }
+  .rel-alta::before { content: '●'; }
+  .rel-media { color: var(--gold); }
+  .rel-media::before { content: '●'; }
+
+  .author-arrow {
+    position: absolute;
+    bottom: 1.8rem;
+    right: 1.8rem;
+    font-size: 1.2rem;
+    color: var(--rust);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,15,15,0.7);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--paper);
+    max-width: 720px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 3rem;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal { transform: translateY(0); }
+
+  .modal-close {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    background: none; border: none;
+    font-size: 1.5rem; cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: var(--rust); }
+
+  .modal-framework {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    letter-spacing: -1px;
+    margin-bottom: 0.3rem;
+  }
+
+  .modal-years {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .modal-concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .modal-siaae {
+    background: rgba(196,82,42,0.06);
+    border-left: 3px solid var(--rust);
+    padding: 1rem 1.2rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .modal-instruments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .instrument {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .modal-description {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* ── FRAMEWORKS ── */
+  #frameworks { background: white; }
+
+  .fw-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .fw-item {
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .fw-item:hover { border-color: var(--rust); transform: translateY(-2px); }
+
+  .fw-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .fw-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .fw-desc {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SIAAE SECTION ── */
+  #siaae { background: var(--ink); color: var(--paper); }
+
+  #siaae .section-tag { color: rgba(245,240,232,0.4); }
+  #siaae .section-tag::after { background: rgba(245,240,232,0.15); }
+  #siaae h2 { color: var(--paper); }
+  #siaae h2 em { color: var(--rust); }
+  #siaae .section-intro { color: rgba(245,240,232,0.6); }
+
+  .siaae-phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(245,240,232,0.1);
+    border: 1px solid rgba(245,240,232,0.1);
+    margin-bottom: 3rem;
+  }
+
+  .phase {
+    padding: 2rem;
+    background: var(--ink);
+  }
+
+  .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+
+  .phase-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--paper);
+    margin-bottom: 0.8rem;
+  }
+
+  .phase-items {
+    list-style: none;
+  }
+
+  .phase-items li {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.5);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .phase-items li::before {
+    content: '→';
+    color: var(--rust);
+    font-size: 0.7rem;
+  }
+
+  .phase-authors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .phase-author {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.5);
+  }
+
+  /* ── REPO SECTION ── */
+  #repo { background: var(--cream); }
+
+  .repo-structure {
+    background: var(--ink);
+    color: #a8c99a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    padding: 2rem;
+    line-height: 1.9;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-left: 3px solid var(--rust);
+  }
+
+  .repo-structure .dir { color: #7ec8e3; }
+  .repo-structure .file { color: #f8f8f2; }
+  .repo-structure .comment { color: #6272a4; }
+  .repo-structure .auto { color: var(--rust); }
+
+  .use-cases {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .use-case {
+    background: white;
+    padding: 1.8rem;
+    border: 1px solid var(--border);
+  }
+
+  .uc-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .uc-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .uc-desc {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--paper);
+  }
+
+  footer .logo span { color: var(--rust); }
+
+  footer p { font-size: 0.8rem; }
+
+  footer a {
+    color: rgba(245,240,232,0.6);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--rust); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 3rem;
+  }
+
+  /* ── DEVELOPMENT SECTION ── */
+  #desarrollo { background: white; }
+
+  .dev-authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 5rem;
+  }
+
+  .dev-card {
+    background: white;
+    padding: 1.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dev-card:hover { background: var(--paper); }
+  .dev-card:hover .author-arrow { opacity: 1; transform: translateX(0); }
+
+  .dev-age-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    background: rgba(61,79,107,0.1);
+    color: var(--slate);
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  .timeline-intro {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    max-width: 60ch;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2.5rem;
+    border-left: 2px solid var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tl-item:hover .tl-content { border-color: var(--slate); }
+
+  .tl-dot {
+    position: absolute;
+    left: -2.9rem;
+    top: 0.4rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+    outline: 2px solid var(--slate);
+    background: var(--slate);
+    transition: background 0.2s;
+  }
+
+  .tl-item:hover .tl-dot { background: var(--rust); outline-color: var(--rust); }
+
+  .tl-age {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .tl-content {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 1.4rem;
+    transition: border-color 0.2s;
+  }
+
+  .tl-stage {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .tl-desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 0.8rem;
+  }
+
+  .tl-milestones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .tl-milestone {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink);
+  }
+
+  .tl-authors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tl-author {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.45rem;
+    background: var(--slate);
+    color: white;
+  }
+
+  .tl-parenting {
+    background: rgba(196,82,42,0.07);
+    border-left: 3px solid var(--rust);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.78rem;
+    color: var(--ink);
+    margin-top: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .tl-parenting strong { color: var(--rust); }
+
+  /* ── LIBRARY SECTION ── */
+  #biblioteca { background: var(--ink); color: var(--paper); }
+  #biblioteca .section-tag { color: rgba(245,240,232,0.4); }
+  #biblioteca .section-tag::after { background: rgba(245,240,232,0.15); }
+  #biblioteca h2 { color: var(--paper); }
+  #biblioteca h2 em { color: var(--gold); }
+  #biblioteca .section-intro { color: rgba(245,240,232,0.55); }
+
+  .lib-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .lib-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .lib-filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    width: 5rem;
+    flex-shrink: 0;
+  }
+
+  .lib-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid rgba(245,240,232,0.18);
+    background: transparent;
+    color: rgba(245,240,232,0.5);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+  }
+
+  .lib-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .lib-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+
+  .lib-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(245,240,232,0.3);
+    margin-left: auto;
+    align-self: flex-end;
+    padding-bottom: 0.1rem;
+  }
+
+  .lib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(245,240,232,0.08);
+  }
+
+  .lib-card {
+    background: var(--ink);
+    padding: 1.6rem;
+    position: relative;
+    transition: background 0.2s;
+    border-left: 3px solid transparent;
+  }
+
+  .lib-card:hover { background: rgba(245,240,232,0.04); }
+
+  .lib-card.cat-clinica { border-left-color: var(--rust); }
+  .lib-card.cat-desarrollo { border-left-color: var(--slate); }
+  .lib-card.cat-aprendizaje { border-left-color: var(--sage); }
+  .lib-card.cat-salud-mental { border-left-color: var(--gold); }
+  .lib-card.cat-crianza { border-left-color: #9b7fd4; }
+
+  .lib-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .lib-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .lib-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.4);
+  }
+
+  .lib-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(245,240,232,0.25);
+    margin-left: auto;
+  }
+
+  .lib-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: var(--paper);
+    line-height: 1.3;
+    margin-bottom: 0.35rem;
+  }
+
+  .lib-authors {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 0.2rem;
+  }
+
+  .lib-publisher {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(245,240,232,0.25);
+    margin-bottom: 0.9rem;
+  }
+
+  .lib-annotation {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.65;
+    border-top: 1px solid rgba(245,240,232,0.07);
+    padding-top: 0.8rem;
+  }
+
+  .lib-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.8rem;
+  }
+
+  .lib-cat {
+    font-size: 0.62rem;
+    padding: 0.15rem 0.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .lib-cat.cat-clinica { background: rgba(196,82,42,0.2); color: #e8845a; }
+  .lib-cat.cat-desarrollo { background: rgba(61,79,107,0.3); color: #7a9cc4; }
+  .lib-cat.cat-aprendizaje { background: rgba(74,103,65,0.3); color: #7aaa6e; }
+  .lib-cat.cat-salud-mental { background: rgba(184,154,62,0.2); color: #d4b855; }
+  .lib-cat.cat-crianza { background: rgba(155,127,212,0.2); color: #b89fd4; }
+
+  .lib-empty {
+    grid-column: 1 / -1;
+    padding: 4rem;
+    text-align: center;
+    color: rgba(245,240,232,0.25);
+    font-size: 0.9rem;
+  }
+
+  .lib-how-to {
+    margin-top: 3rem;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    padding: 2rem;
+  }
+
+  .lib-how-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--paper);
+    margin-bottom: 1rem;
+  }
+
+  .lib-how-title em { color: var(--gold); font-style: italic; }
+
+  .lib-how-code {
+    background: rgba(0,0,0,0.4);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #a8c99a;
+    padding: 1.2rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    border-left: 2px solid var(--gold);
+    margin: 1rem 0;
+  }
+
+  .lib-how-code .key { color: #7ec8e3; }
+  .lib-how-code .val { color: #f8f8f2; }
+  .lib-how-code .comment { color: rgba(245,240,232,0.25); }
+
+  .lib-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+  }
+
+  .lib-source-pill {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.5);
+  }
+
+  /* ── DSM-5 SECTION ── */
+  #dsm { background: #13151a; color: var(--paper); }
+  #dsm .section-tag { color: rgba(245,240,232,0.35); }
+  #dsm .section-tag::after { background: rgba(245,240,232,0.12); }
+  #dsm h2 { color: var(--paper); }
+  #dsm h2 em { color: #6eb5ff; }
+  #dsm .section-intro { color: rgba(245,240,232,0.5); }
+
+  .dsm-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    background: #13151a;
+    padding: 1rem 0 1.2rem;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+  }
+
+  .dsm-search-row {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .dsm-search {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .dsm-search::placeholder { color: rgba(245,240,232,0.3); }
+  .dsm-search:focus { border-color: #6eb5ff; }
+
+  .dsm-result-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(245,240,232,0.3);
+    white-space: nowrap;
+  }
+
+  .dsm-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .dsm-filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+    margin-right: 0.2rem;
+  }
+
+  .dsm-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 0.28rem 0.75rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: rgba(245,240,232,0.45);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+  }
+  .dsm-btn:hover { border-color: #6eb5ff; color: #6eb5ff; }
+  .dsm-btn.active { background: #6eb5ff; border-color: #6eb5ff; color: #13151a; font-weight: 700; }
+
+  .dsm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .dsm-card {
+    background: #13151a;
+    padding: 1.6rem;
+    cursor: pointer;
+    transition: background 0.18s;
+    position: relative;
+    border-left: 3px solid transparent;
+  }
+  .dsm-card:hover { background: rgba(110,181,255,0.05); border-left-color: #6eb5ff; }
+
+  .dsm-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; }
+
+  .dsm-chapter-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .dsm-prevalence {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: rgba(245,240,232,0.3);
+  }
+
+  .dsm-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(245,240,232,0.25);
+    margin-bottom: 0.3rem;
+  }
+
+  .dsm-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--paper);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .dsm-summary {
+    font-size: 0.81rem;
+    color: rgba(245,240,232,0.45);
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
+  }
+
+  .dsm-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .dsm-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.45rem;
+    background: rgba(110,181,255,0.08);
+    color: rgba(110,181,255,0.7);
+    border: 1px solid rgba(110,181,255,0.15);
+  }
+
+  .dsm-es-flag {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(184,154,62,0.12);
+    padding: 0.15rem 0.4rem;
+  }
+
+  /* Chapter color coding */
+  .ch-ansiedad { background: rgba(110,181,255,0.12); color: #6eb5ff; }
+  .ch-depresion { background: rgba(196,82,42,0.15); color: #e8845a; }
+  .ch-bipolar { background: rgba(184,154,62,0.15); color: #d4b855; }
+  .ch-trauma { background: rgba(155,127,212,0.15); color: #b89fd4; }
+  .ch-tdah { background: rgba(74,103,65,0.2); color: #7aaa6e; }
+  .ch-tca { background: rgba(61,79,107,0.25); color: #7a9cc4; }
+  .ch-personalidad { background: rgba(196,82,42,0.12); color: #d4855a; }
+  .ch-psicosis { background: rgba(200,50,50,0.15); color: #e07070; }
+  .ch-neuro { background: rgba(74,103,65,0.15); color: #90c484; }
+  .ch-sueno { background: rgba(61,79,107,0.2); color: #88aacc; }
+  .ch-adapta { background: rgba(184,154,62,0.12); color: #c4a840; }
+  .ch-disruptivo { background: rgba(196,82,42,0.1); color: #cc7755; }
+
+  /* DSM Modal overrides */
+  .dsm-modal { max-width: 820px; background: #1a1d24; color: var(--paper); }
+  .dsm-modal .modal-close { color: rgba(245,240,232,0.4); }
+  .dsm-modal .modal-close:hover { color: #6eb5ff; }
+
+  .dsm-modal-top { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 1.5rem; }
+
+  .dsm-modal-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(245,240,232,0.3);
+    margin-bottom: 0.3rem;
+  }
+
+  .dsm-modal-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--paper);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .dsm-modal-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+  .dsm-modal-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.2rem 0.6rem; }
+
+  .dsm-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6eb5ff;
+    margin-bottom: 0.7rem;
+    margin-top: 1.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba(110,181,255,0.15);
+  }
+
+  .dsm-criteria-list { list-style: none; }
+  .dsm-criteria-list li {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.7);
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.55;
+    display: flex;
+    gap: 0.7rem;
+  }
+  .dsm-criteria-list li::before { content: attr(data-label); color: #6eb5ff; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; flex-shrink: 0; padding-top: 0.1rem; }
+
+  .dsm-specifiers {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+  }
+  .dsm-specifier {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgba(110,181,255,0.2);
+    color: rgba(110,181,255,0.7);
+    background: rgba(110,181,255,0.05);
+  }
+
+  .dsm-treatments { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .dsm-tx-col { }
+  .dsm-tx-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .dsm-tx-label.first { color: #7aaa6e; }
+  .dsm-tx-label.second { color: rgba(245,240,232,0.35); }
+  .dsm-tx-item {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.6);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: flex-start; gap: 0.5rem;
+  }
+  .dsm-tx-item::before { content: '→'; font-size: 0.65rem; flex-shrink: 0; padding-top: 0.1rem; }
+  .dsm-tx-item.first::before { color: #7aaa6e; }
+  .dsm-tx-item.second::before { color: rgba(245,240,232,0.2); }
+
+  .dsm-instruments-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .dsm-instrument {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(245,240,232,0.6);
+  }
+
+  .dsm-theory-links { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .dsm-author-link {
+    font-size: 0.76rem;
+    padding: 0.3rem 0.7rem;
+    background: rgba(184,154,62,0.1);
+    border: 1px solid rgba(184,154,62,0.2);
+    color: var(--gold);
+    cursor: default;
+  }
+
+  .dsm-es-box {
+    background: rgba(110,181,255,0.06);
+    border-left: 3px solid #6eb5ff;
+    padding: 1rem 1.2rem;
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.65);
+  }
+  .dsm-es-box strong { color: #6eb5ff; }
+
+  .dsm-diff {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.6;
+    background: rgba(255,255,255,0.03);
+    padding: 0.8rem 1rem;
+    border-left: 2px solid rgba(255,255,255,0.08);
+  }
+
+  .dsm-update-notice {
+    margin-top: 3rem;
+    background: rgba(110,181,255,0.05);
+    border: 1px solid rgba(110,181,255,0.12);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .dsm-update-icon { font-size: 2rem; flex-shrink: 0; }
+  .dsm-update-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--paper); margin-bottom: 0.4rem; }
+  .dsm-update-title em { color: #6eb5ff; font-style: italic; }
+  .dsm-update-desc { font-size: 0.82rem; color: rgba(245,240,232,0.45); line-height: 1.65; }
+
+  .dsm-empty { grid-column: 1/-1; padding: 4rem; text-align: center; color: rgba(245,240,232,0.2); font-size: 0.9rem; }
+
+  @media (max-width: 600px) {
+    .dsm-treatments { grid-template-columns: 1fr; }
+    .dsm-modal-name { font-size: 1.8rem; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Psico<span>Educ</span></a>
+  <ul class="nav-links">
+    <li><a href="#autores">Clínica</a></li>
+    <li><a href="#desarrollo">Desarrollo</a></li>
+    <li><a href="#dsm">DSM-5</a></li>
+    <li><a href="#frameworks">Frameworks</a></li>
+    <li><a href="#siaae">SIAAE</a></li>
+    <li><a href="#biblioteca">Biblioteca</a></li>
+    <li><a href="#repo">Repositorio</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-label">Psicología Clínica · Desarrollo Humano · Educación Superior · Chile</p>
+    <h1>Grandes autores.<br>Aplicados al <em>aprendizaje.</em></h1>
+    <p class="hero-body">
+      Base de conocimiento que conecta psicología clínica y desarrollo humano con intervención concreta en bienestar estudiantil, autorregulación y salud mental en educación superior.
+    </p>
+    <div class="hero-cta">
+      <a href="#autores" class="btn-primary">Explorar autores →</a>
+      <a href="#desarrollo" class="btn-ghost">Desarrollo humano</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="stat-card rust">
+      <p class="stat-label">Autores clínicos</p>
+      <p class="stat-value">9</p>
+      <p class="stat-sub">Psicología clínica con relevancia educativa</p>
+    </div>
+    <div class="stat-card sage">
+      <p class="stat-label">Autores del desarrollo</p>
+      <p class="stat-value">8</p>
+      <p class="stat-sub">Del embrión a la adultez emergente</p>
+    </div>
+    <div class="stat-card slate">
+      <p class="stat-label">Componentes SIAAE</p>
+      <p class="stat-value">3</p>
+      <p class="stat-sub">Previsión · Ejecución · Autorreflexión</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AUTHORS -->
+<section id="autores">
+  <p class="section-tag reveal">Base teórica</p>
+  <h2 class="reveal">Los autores <em>fundamentales</em></h2>
+  <p class="section-intro reveal">
+    Cada autor se articula con componentes específicos del bienestar estudiantil, la autorregulación del aprendizaje y las estrategias de intervención psicoeducativa en educación superior.
+  </p>
+
+  <div class="authors-grid" id="authorsGrid">
+  </div>
+</section>
+
+<!-- DESARROLLO -->
+<section id="desarrollo">
+  <p class="section-tag reveal">Psicología del Desarrollo</p>
+  <h2 class="reveal">Del embrión a la <em>adultez</em></h2>
+  <p class="section-intro reveal">
+    Autores fundantes y contemporáneos del desarrollo humano, con aplicación directa en crianza respetuosa, educación y comprensión del ciclo vital completo.
+  </p>
+
+  <div class="dev-authors-grid" id="devAuthorsGrid"></div>
+
+  <!-- TIMELINE -->
+  <p class="timeline-title reveal">Línea de tiempo del desarrollo</p>
+  <p class="timeline-intro reveal">Hitos neurobiológicos, emocionales y cognitivos desde la gestación hasta la adultez emergente — con orientación para cuidadores y educadores.</p>
+
+  <div class="timeline reveal">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">Prenatal · 0–40 semanas</p>
+      <div class="tl-content">
+        <p class="tl-stage">Vida intrauterina</p>
+        <p class="tl-desc">La neurogenesis produce ~250.000 neuronas por minuto en el pico gestacional. A las 26 semanas el feto procesa sonidos y reconoce la voz materna. El estrés materno crónico eleva cortisol fetal, afectando la regulación del eje HHA postnatal. El vínculo comienza antes del nacimiento.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Neurogenesis masiva</span>
+          <span class="tl-milestone">Audición activa sem. 26</span>
+          <span class="tl-milestone">Reconocimiento voz materna</span>
+          <span class="tl-milestone">Respuesta a emociones maternas</span>
+          <span class="tl-milestone">Memoria olfativa fetal</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Schore</span>
+          <span class="tl-author">Stern</span>
+          <span class="tl-author">Siegel</span>
+        </div>
+        <div class="tl-parenting"><strong>Para cuidadores:</strong> Hablarle, cantarle y tocar el vientre no es simbólico — es estimulación sensorial real. El estado emocional de la madre es un ambiente para el bebé.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">0–3 meses · Recién nacido</p>
+      <div class="tl-content">
+        <p class="tl-stage">Regulación diádica y vínculo primario</p>
+        <p class="tl-desc">El recién nacido no tiene capacidad de autorregulación: depende completamente del cuidador para regular su sistema nervioso. Tronick describe el ciclo de <em>engagement–disengagement–reengagement</em> como el prototipo del aprendizaje relacional. El hemisferio derecho del cuidador comunica directamente con el derecho del bebé (Schore).</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Sonrisa social (6 sem.)</span>
+          <span class="tl-milestone">Seguimiento visual</span>
+          <span class="tl-milestone">Imitación neonatal</span>
+          <span class="tl-milestone">Preferencia cara humana</span>
+          <span class="tl-milestone">Co-regulación total</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Tronick</span>
+          <span class="tl-author">Schore</span>
+          <span class="tl-author">Stern</span>
+          <span class="tl-author">Winnicott</span>
+        </div>
+        <div class="tl-parenting"><strong>Para cuidadores:</strong> Responder al llanto no "malcría". Es la única forma que tiene el bebé de comunicar necesidad. La respuesta consistente construye el sistema nervioso, literalmente.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">4–8 meses · Bebé temprano</p>
+      <div class="tl-content">
+        <p class="tl-stage">Intersubjetividad primaria y exploración</p>
+        <p class="tl-desc">El bebé comienza a diferenciar "yo" de "otro". Stern describe el surgimiento del <em>self nuclear</em> — sentido emergente de agencia y coherencia corporal. La "protoconversación" (turnos de vocalización) es el primer diálogo. A los 8 meses aparece la permanencia del objeto (Piaget): el bebé sabe que lo que no ve sigue existiendo — y por eso sufre más cuando el cuidador se va.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Self nuclear (Stern)</span>
+          <span class="tl-milestone">Protoconversación</span>
+          <span class="tl-milestone">Permanencia objeto (inicio)</span>
+          <span class="tl-milestone">Ansiedad de separación (pico)</span>
+          <span class="tl-milestone">Imitación diferida</span>
+          <span class="tl-milestone">Sensoriomotor II (Piaget)</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Stern</span>
+          <span class="tl-author">Piaget</span>
+          <span class="tl-author">Tronick</span>
+          <span class="tl-author">Bowlby</span>
+        </div>
+        <div class="tl-parenting"><strong>A los 8 meses (tu hijo):</strong> No existe comprensión de "no" como prohibición — el prefrontal aún no conecta. Lo que regula es tu tono de voz, tu calma corporal y la rutina predecible. Resistir el cambio de pañal es activación motora normal, no desafío. La ansiedad al dormir es peak de separación — sabe que existes cuando no estás.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">9–18 meses · Movilidad e intersubjetividad</p>
+      <div class="tl-content">
+        <p class="tl-stage">Intersubjetividad secundaria y exploración activa</p>
+        <p class="tl-desc">Con la marcha llega la autonomía física y el primer "no" del niño como afirmación de sí mismo. Erikson: crisis <em>autonomía vs. vergüenza/duda</em>. El <em>social referencing</em> (mirar al cuidador para evaluar si algo es seguro) muestra que la base segura es activa. Greenspan describe el surgimiento de la intencionalidad comunicativa.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Marcha independiente</span>
+          <span class="tl-milestone">Primeras palabras</span>
+          <span class="tl-milestone">Social referencing</span>
+          <span class="tl-milestone">Juego funcional</span>
+          <span class="tl-milestone">Intersubjetividad secundaria</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Stern</span>
+          <span class="tl-author">Greenspan</span>
+          <span class="tl-author">Ainsworth</span>
+        </div>
+        <div class="tl-parenting"><strong>Para cuidadores:</strong> El "no" del niño no es oposición patológica — es el inicio del self. Acompañar con firmeza afectuosa: "Puedo ver que quieres X, y aun así hacemos Y." La contención física firme y calmada en momentos de resistencia es distinta al castigo.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">2–3 años · Primera infancia</p>
+      <div class="tl-content">
+        <p class="tl-stage">Explosión lingüística, autonomía y primeras normas</p>
+        <p class="tl-desc">El lenguaje reorganiza el pensamiento (Vygotsky). Aparece el juego simbólico y la capacidad de representar el mundo internamente. Los "terribles dos" son la crisis normativa de autonomía. El cerebro emocional (amígdala) es dominante — el prefrontal empieza a conectar pero muy lentamente. Los límites se internalizan por repetición calmada, no por castigo.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Explosión léxica</span>
+          <span class="tl-milestone">Juego simbólico</span>
+          <span class="tl-milestone">Rabietas (pico)</span>
+          <span class="tl-milestone">Control de esfínteres</span>
+          <span class="tl-milestone">Preoperacional (Piaget)</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Vygotsky</span>
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Piaget</span>
+          <span class="tl-author">Gopnik</span>
+        </div>
+        <div class="tl-parenting"><strong>Para cuidadores:</strong> Las rabietas son neurológicas, no manipulación. El niño literalmente no puede calmarse solo todavía — necesita tu sistema nervioso regulado para calmar el suyo. Nombrar la emoción ("estás muy enojado") activa el prefrontal y facilita la regulación.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">4–6 años · Preescolar</p>
+      <div class="tl-content">
+        <p class="tl-stage">Teoría de la mente, juego e iniciativa</p>
+        <p class="tl-desc">Aparece la <em>teoría de la mente</em> (~4 años): el niño comprende que otros tienen creencias diferentes a las suyas. Erikson: <em>iniciativa vs. culpa</em>. Bronfenbrenner enfatiza el rol del microsistema (familia, jardín) como determinante del desarrollo. Gopnik compara la mente del preescolar con un "linterna" — atención difusa y altamente creativa, ideal para el aprendizaje exploratorio.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Teoría de la mente</span>
+          <span class="tl-milestone">Juego cooperativo</span>
+          <span class="tl-milestone">Pensamiento mágico</span>
+          <span class="tl-milestone">Función simbólica plena</span>
+          <span class="tl-milestone">Regulación emocional inicial</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Bronfenbrenner</span>
+          <span class="tl-author">Gopnik</span>
+          <span class="tl-author">Piaget</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">7–12 años · Escolar</p>
+      <div class="tl-content">
+        <p class="tl-stage">Operaciones concretas, industria y pares</p>
+        <p class="tl-desc">Piaget: <em>operaciones concretas</em> — el niño puede realizar operaciones lógicas sobre objetos reales. Erikson: <em>industria vs. inferioridad</em> — el rendimiento escolar se convierte en fuente central de autoconcepto. El grupo de pares gana peso progresivo como sistema de referencia (Bronfenbrenner). Bandura: la autoeficacia académica se consolida en esta etapa.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Lógica concreta</span>
+          <span class="tl-milestone">Autoconcepto académico</span>
+          <span class="tl-milestone">Conservación (Piaget)</span>
+          <span class="tl-milestone">Pares como referente</span>
+          <span class="tl-milestone">Autorregulación creciente</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Piaget</span>
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Bandura</span>
+          <span class="tl-author">Bronfenbrenner</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">12–18 años · Adolescencia</p>
+      <div class="tl-content">
+        <p class="tl-stage">Identidad, pensamiento formal y neuroplasticidad</p>
+        <p class="tl-desc">Piaget: <em>operaciones formales</em> — pensamiento hipotético-deductivo. Erikson: <em>identidad vs. confusión de rol</em> — Marcia describe cuatro estatus identitarios (logro, moratoria, cierre, difusión). El cerebro adolescente tiene alta neuroplasticidad y recompensa sensible, con corteza prefrontal aún en desarrollo — lo que explica la toma de riesgos y la importancia del grupo.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Pensamiento abstracto</span>
+          <span class="tl-milestone">Construcción identitaria</span>
+          <span class="tl-milestone">Vulnerabilidad salud mental</span>
+          <span class="tl-milestone">Importancia grupo pares</span>
+          <span class="tl-milestone">Búsqueda de sentido</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Piaget</span>
+          <span class="tl-author">Marcia</span>
+          <span class="tl-author">Siegel</span>
+          <span class="tl-author">Frankl</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-age">18–25 años · Adultez emergente</p>
+      <div class="tl-content">
+        <p class="tl-stage">Adultez emergente — el período de la educación superior</p>
+        <p class="tl-desc">Arnett describe la <em>adultez emergente</em> como etapa diferenciada: exploración identitaria, inestabilidad, autoenfoque, sensación de "entre medio" y posibilidades abiertas. El prefrontal culmina su maduración (~25 años). Es el período de mayor incidencia de trastornos mentales y también de mayor neuroplasticidad disponible para el cambio. El SIAAE opera exactamente en este período.</p>
+        <div class="tl-milestones">
+          <span class="tl-milestone">Exploración identitaria</span>
+          <span class="tl-milestone">Maduración prefrontal</span>
+          <span class="tl-milestone">Pico incidencia SM</span>
+          <span class="tl-milestone">Alta neuroplasticidad</span>
+          <span class="tl-milestone">Autonomía en proceso</span>
+          <span class="tl-milestone">Contexto ES / laboral</span>
+        </div>
+        <div class="tl-authors">
+          <span class="tl-author">Arnett</span>
+          <span class="tl-author">Erikson</span>
+          <span class="tl-author">Siegel</span>
+          <span class="tl-author">Bronfenbrenner</span>
+        </div>
+        <div class="tl-parenting"><strong>Relevancia SIAAE:</strong> Los estudiantes de ES están en plena adultez emergente. Sus patrones de regulación, apego e identidad vienen construyéndose desde el nacimiento — lo que explica por qué el apoyo psicoeducativo debe ser integral, no solo académico.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FRAMEWORKS -->
+
+<section id="frameworks">
+  <p class="section-tag reveal">Organización conceptual</p>
+  <h2 class="reveal">Cinco <em>marcos</em> teóricos</h2>
+  <p class="section-intro reveal">Cada framework organiza un conjunto de autores y ofrece una perspectiva complementaria sobre el aprendizaje y la salud mental.</p>
+
+  <div class="fw-list reveal">
+    <div class="fw-item">
+      <div class="fw-icon">🧩</div>
+      <p class="fw-name">Cognitivo-Conductual</p>
+      <p class="fw-desc">Pensamientos, emociones y conducta en interacción. Base para intervención en ansiedad académica y rendimiento.</p>
+    </div>
+    <div class="fw-item">
+      <div class="fw-icon">🌱</div>
+      <p class="fw-name">Humanismo</p>
+      <p class="fw-desc">Tendencia actualizante y consideración positiva incondicional. Sustento del vínculo pedagógico y la orientación.</p>
+    </div>
+    <div class="fw-item">
+      <div class="fw-icon">🔗</div>
+      <p class="fw-name">Teoría del Apego</p>
+      <p class="fw-desc">Modelos operativos internos y base segura. Clave para comprender la retención y pertenencia institucional.</p>
+    </div>
+    <div class="fw-item">
+      <div class="fw-icon">🧠</div>
+      <p class="fw-name">Neurobiología Interpersonal</p>
+      <p class="fw-desc">Integración neuronal, ventana de tolerancia y mindfulness. Puente entre neurociencia y práctica educativa.</p>
+    </div>
+    <div class="fw-item">
+      <div class="fw-icon">🤝</div>
+      <p class="fw-name">Sociocultural</p>
+      <p class="fw-desc">Zona de desarrollo próximo y andamiaje. Fundamento del aprendizaje colaborativo y tutorías pares.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SIAAE -->
+<section id="siaae">
+  <p class="section-tag reveal">Aplicación institucional</p>
+  <h2 class="reveal">Modelo <em>SIAAE</em></h2>
+  <p class="section-intro reveal">Sistema Integral de Aprendizaje Autorregulado en Educación Superior — basado en Zimmerman, con sustento clínico por fase.</p>
+
+  <div class="siaae-phases reveal">
+    <div class="phase">
+      <p class="phase-num">01 / PREVISIÓN</p>
+      <p class="phase-name">Planificación estratégica</p>
+      <ul class="phase-items">
+        <li>Establecimiento de metas</li>
+        <li>Medición autoeficacia (ACAES)</li>
+        <li>Orientación vocacional</li>
+        <li>Planificación del semestre</li>
+      </ul>
+      <div class="phase-authors">
+        <span class="phase-author">Bandura</span>
+        <span class="phase-author">Frankl</span>
+        <span class="phase-author">Vygotsky</span>
+      </div>
+    </div>
+    <div class="phase">
+      <p class="phase-num">02 / EJECUCIÓN</p>
+      <p class="phase-name">Control volicional</p>
+      <ul class="phase-items">
+        <li>Regulación emocional</li>
+        <li>Aprendizaje colaborativo</li>
+        <li>Tutoría pares (ZDP)</li>
+        <li>Mindfulness aplicado</li>
+      </ul>
+      <div class="phase-authors">
+        <span class="phase-author">Linehan</span>
+        <span class="phase-author">Rogers</span>
+        <span class="phase-author">Siegel</span>
+      </div>
+    </div>
+    <div class="phase">
+      <p class="phase-num">03 / AUTORREFLEXIÓN</p>
+      <p class="phase-name">Evaluación y adaptación</p>
+      <ul class="phase-items">
+        <li>Atribución causal adaptativa</li>
+        <li>Reestructuración cognitiva</li>
+        <li>Autoconcepto académico</li>
+        <li>Calibración autoeficacia</li>
+      </ul>
+      <div class="phase-authors">
+        <span class="phase-author">Beck</span>
+        <span class="phase-author">Bandura</span>
+        <span class="phase-author">Rogers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REPO -->
+<section id="repo">
+  <p class="section-tag reveal">GitHub</p>
+  <h2 class="reveal">Estructura del <em>repositorio</em></h2>
+  <p class="section-intro reveal">Knowledge base versionado y automatizado. Cada push a un archivo de autor activa la generación automática de su aplicación educacional.</p>
+
+  <div class="repo-structure reveal">
+<span class="dir">clinical-psych-education/</span>
+├── <span class="dir">authors/</span>           <span class="comment"># Fichas individuales por autor</span>
+│   ├── <span class="file">beck.md</span>
+│   ├── <span class="file">bandura.md</span>
+│   └── <span class="file">...</span> (9 autores)
+├── <span class="dir">frameworks/</span>        <span class="comment"># Marcos teóricos integrados</span>
+├── <span class="dir">applications/</span>
+│   ├── <span class="file">aprendizaje_autorregulado.md</span>
+│   ├── <span class="file">bienestar_estudiantil.md</span>
+│   └── <span class="dir auto">auto_generated/</span>   <span class="comment"># ← Claude API genera esto</span>
+├── <span class="dir">data/</span>
+│   └── <span class="file">authors_index.json</span>  <span class="comment"># Metadatos estructurados</span>
+├── <span class="dir">scripts/</span>
+│   └── <span class="file">generate_summary.py</span>
+└── <span class="dir">.github/workflows/</span>
+    └── <span class="auto">auto_summary.yml</span>    <span class="comment"># Ejecución automática</span>
+  </div>
+
+  <h3 style="font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:2rem;" class="reveal">Utilidad <em>concreta</em> para tu trabajo</h3>
+
+  <div class="use-cases reveal">
+    <div class="use-case">
+      <div class="uc-icon">🎓</div>
+      <p class="uc-title">Base teórica ANID</p>
+      <p class="uc-desc">Trazabilidad teórica sistematizada para postulación a programas doctorales. Cada autor conecta con una línea de investigación aplicada.</p>
+    </div>
+    <div class="use-case">
+      <div class="uc-icon">📊</div>
+      <p class="uc-title">Onboarding del equipo</p>
+      <p class="uc-desc">Recurso de formación inicial para profesionales nuevos en la Unidad de Bienestar. Autores, marcos e instrumentos en un solo lugar.</p>
+    </div>
+    <div class="use-case">
+      <div class="uc-icon">🔁</div>
+      <p class="uc-title">Actualización automática</p>
+      <p class="uc-desc">GitHub Actions + Claude API regeneran las aplicaciones educacionales cada vez que actualizas un archivo de autor.</p>
+    </div>
+    <div class="use-case">
+      <div class="uc-icon">🌐</div>
+      <p class="uc-title">Website institucional</p>
+      <p class="uc-desc">Esta misma web puede publicarse como GitHub Pages. Cero hosting, cero costo, actualización automática con cada commit.</p>
+    </div>
+    <div class="use-case">
+      <div class="uc-icon">📝</div>
+      <p class="uc-title">Insumo para publicaciones</p>
+      <p class="uc-desc">Fichas estructuradas como punto de partida para artículos, presentaciones en congresos o reportes de investigación aplicada.</p>
+    </div>
+    <div class="use-case">
+      <div class="uc-icon">🔗</div>
+      <p class="uc-title">Portfolio académico</p>
+      <p class="uc-desc">GitHub como evidencia pública de producción sistematizada. Útil para postulaciones a jefaturas o programas de postgrado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BIBLIOTECA -->
+<section id="biblioteca">
+  <p class="section-tag reveal">Textos complementarios</p>
+  <h2 class="reveal">Biblioteca de <em>referencia</em></h2>
+  <p class="section-intro reveal">Libros y artículos fundamentales en psicología clínica, desarrollo humano y educación. Organizados por era, tipo y área temática.</p>
+
+  <div class="lib-controls reveal">
+    <div class="lib-filter-row">
+      <span class="lib-filter-label">Era</span>
+      <button class="lib-btn active" data-filter="era" data-val="all">Todos</button>
+      <button class="lib-btn" data-filter="era" data-val="clasico">Clásicos · pre-2000</button>
+      <button class="lib-btn" data-filter="era" data-val="2000-2010">2000–2010</button>
+      <button class="lib-btn" data-filter="era" data-val="2011-2019">2011–2019</button>
+      <button class="lib-btn" data-filter="era" data-val="2020-presente">2020–2025</button>
+      <span class="lib-count" id="libCount"></span>
+    </div>
+    <div class="lib-filter-row">
+      <span class="lib-filter-label">Tipo</span>
+      <button class="lib-btn active" data-filter="type" data-val="all">Todos</button>
+      <button class="lib-btn" data-filter="type" data-val="libro">Libro</button>
+      <button class="lib-btn" data-filter="type" data-val="articulo">Artículo</button>
+    </div>
+    <div class="lib-filter-row">
+      <span class="lib-filter-label">Área</span>
+      <button class="lib-btn active" data-filter="cat" data-val="all">Todas</button>
+      <button class="lib-btn" data-filter="cat" data-val="clinica">Psicología Clínica</button>
+      <button class="lib-btn" data-filter="cat" data-val="desarrollo">Desarrollo</button>
+      <button class="lib-btn" data-filter="cat" data-val="aprendizaje">Aprendizaje</button>
+      <button class="lib-btn" data-filter="cat" data-val="salud-mental">Salud Mental</button>
+      <button class="lib-btn" data-filter="cat" data-val="crianza">Crianza</button>
+    </div>
+  </div>
+
+  <div class="lib-grid" id="libGrid"></div>
+
+  <!-- HOW TO UPDATE -->
+  <div class="lib-how-to reveal">
+    <p class="lib-how-title">Cómo mantenerla <em>actualizada</em></p>
+    <p style="font-size:0.85rem;color:rgba(245,240,232,0.45);margin-bottom:0.8rem;line-height:1.7;">
+      La biblioteca se alimenta del archivo <code style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--gold);">data/library.json</code> en el repositorio. Agregar una entrada nueva es editar ese archivo y hacer commit — GitHub Pages lo publica automáticamente.
+    </p>
+    <div class="lib-how-code">
+<span class="comment">// Estructura de cada entrada en data/library.json</span>
+{
+  <span class="key">"id"</span>: <span class="val">"apellido-año"</span>,               <span class="comment">// identificador único</span>
+  <span class="key">"type"</span>: <span class="val">"libro"</span> | <span class="val">"articulo"</span>,
+  <span class="key">"year"</span>: <span class="val">2024</span>,
+  <span class="key">"authors"</span>: <span class="val">"Apellido, N. & Apellido, N."</span>,
+  <span class="key">"title"</span>: <span class="val">"Título completo del texto"</span>,
+  <span class="key">"publisher"</span>: <span class="val">"Editorial"</span>,            <span class="comment">// o "journal" para artículos</span>
+  <span class="key">"categories"</span>: [<span class="val">"clinica"</span>, <span class="val">"desarrollo"</span>],  <span class="comment">// ver lista abajo</span>
+  <span class="key">"annotation"</span>: <span class="val">"Descripción breve y útil."</span>,
+  <span class="key">"language"</span>: <span class="val">"en"</span> | <span class="val">"es"</span>,
+  <span class="key">"era"</span>: <span class="val">"2020-presente"</span>            <span class="comment">// clasico | 2000-2010 | 2011-2019 | 2020-presente</span>
+}
+    </div>
+    <p style="font-size:0.82rem;color:rgba(245,240,232,0.4);margin-bottom:0.8rem;">Fuentes recomendadas para mantenerse actualizado:</p>
+    <div class="lib-sources">
+      <span class="lib-source-pill">Educational Psychology Review</span>
+      <span class="lib-source-pill">Journal of Educational Psychology</span>
+      <span class="lib-source-pill">Contemporary Educational Psychology</span>
+      <span class="lib-source-pill">Development & Psychopathology</span>
+      <span class="lib-source-pill">Attachment & Human Development</span>
+      <span class="lib-source-pill">Emerging Adulthood (journal)</span>
+      <span class="lib-source-pill">Google Scholar Alerts</span>
+      <span class="lib-source-pill">ResearchGate</span>
+      <span class="lib-source-pill">PubMed — MeSH: higher education + mental health</span>
+    </div>
+  </div>
+</section>
+
+<!-- DSM-5 -->
+<section id="dsm">
+  <p class="section-tag reveal">Herramienta Clínica</p>
+  <h2 class="reveal">DSM-5 — Diagnóstico, <em>Teoría</em> & Tratamiento</h2>
+  <p class="section-intro reveal">Referencia interactiva de diagnósticos. Cada entrada conecta criterios DSM-5 con marcos teóricos, tratamientos de primera línea, instrumentos y contexto de Educación Superior.</p>
+
+  <div class="dsm-toolbar">
+    <div class="dsm-search-row">
+      <input class="dsm-search" type="text" id="dsmSearch" placeholder="Buscar diagnóstico, código DSM, síntoma…">
+      <span class="dsm-result-count" id="dsmCount"></span>
+    </div>
+    <div class="dsm-filter-row">
+      <span class="dsm-filter-label">Capítulo</span>
+      <button class="dsm-btn active" data-dsmf="chapter" data-dsmv="all">Todos</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="ansiedad">Ansiedad</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="depresion">Depresivo</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="bipolar">Bipolar</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="trauma">Trauma</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="tdah">Neurodesarrollo</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="tca">Alimentación</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="personalidad">Personalidad</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="psicosis">Psicótico</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="adapta">Adaptación</button>
+      <button class="dsm-btn" data-dsmf="chapter" data-dsmv="disruptivo">Disruptivo</button>
+    </div>
+    <div class="dsm-filter-row">
+      <span class="dsm-filter-label">ES</span>
+      <button class="dsm-btn active" data-dsmf="es" data-dsmv="all">Todos</button>
+      <button class="dsm-btn" data-dsmf="es" data-dsmv="true">Alta prevalencia en ES</button>
+    </div>
+  </div>
+
+  <div class="dsm-grid" id="dsmGrid"></div>
+
+  <div class="dsm-update-notice reveal">
+    <div class="dsm-update-icon">🔄</div>
+    <div>
+      <p class="dsm-update-title">Actualización a <em>DSM-5-TR o DSM-6</em></p>
+      <p class="dsm-update-desc">Cada diagnóstico en el código JavaScript tiene un campo <code style="font-family:'JetBrains Mono',monospace;color:#6eb5ff;font-size:0.8rem;">dsm_version: "DSM-5"</code>. Cuando se publique una nueva versión, edita el campo de criterios (<code style="font-family:'JetBrains Mono',monospace;color:#6eb5ff;font-size:0.8rem;">criteria</code>), actualiza el código y el campo de versión. Los cambios se reflejan automáticamente en todos los modales. El DSM-5-TR (2022) ya está incorporado en los especificadores y códigos actualizados de esta versión.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p class="logo">Psico<span>Educ</span></p>
+    <p style="margin-top:0.3rem;">Psicología Clínica & Educación Superior — Chile</p>
+  </div>
+  <div style="display:flex;gap:2rem;align-items:center;">
+    <a href="#autores">Autores</a>
+    <a href="#siaae">SIAAE</a>
+    <a href="https://github.com" target="_blank">GitHub →</a>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const authors = [
+  {
+    id: "beck",
+    name: "Aaron Beck",
+    years: "1921 – 2021",
+    framework: "Cognitivo-Conductual",
+    fwClass: "fw-tcc",
+    concepts: ["distorsiones cognitivas", "tríada cognitiva", "pensamientos automáticos", "TCC"],
+    instruments: ["BDI-II", "BAI", "BHS"],
+    relevance: "alta",
+    siaae: "Fase de Autorreflexión — reestructuración cognitiva post-resultado y trabajo sobre atribución causal disfuncional.",
+    desc: "Beck propone que los trastornos emocionales emergen de patrones cognitivos disfuncionales. Su tríada cognitiva describe pensamientos negativos automáticos sobre uno mismo, el mundo y el futuro, organizados en esquemas relativamente estables."
+  },
+  {
+    id: "bandura",
+    name: "Albert Bandura",
+    years: "1925 – 2021",
+    framework: "Social-Cognitivo",
+    fwClass: "fw-social",
+    concepts: ["autoeficacia", "aprendizaje vicario", "modelado", "autorregulación"],
+    instruments: ["GSES", "MSLQ-autoeficacia", "ACAES"],
+    relevance: "alta",
+    siaae: "Sustento motivacional transversal — la autoeficacia opera en las tres fases del ciclo Zimmerman como predictor de compromiso y persistencia.",
+    desc: "Bandura desarrolla la Teoría Social Cognitiva y el constructo de autoeficacia: la creencia de una persona en su capacidad para ejecutar las conductas necesarias para producir resultados específicos en contextos académicos."
+  },
+  {
+    id: "rogers",
+    name: "Carl Rogers",
+    years: "1902 – 1987",
+    framework: "Humanismo",
+    fwClass: "fw-humanismo",
+    concepts: ["consideración positiva incondicional", "empatía", "autenticidad", "tendencia actualizante"],
+    instruments: ["RSES", "Escala Autoconcepto"],
+    relevance: "alta",
+    siaae: "Fase de Ejecución — sustento del clima relacional y el vínculo pedagógico como condición facilitadora del aprendizaje.",
+    desc: "Rogers propone que el crecimiento personal emerge cuando existen condiciones relacionales básicas: empatía, autenticidad y consideración positiva incondicional. En educación, esto se traduce en el tipo de vínculo que facilita el aprendizaje significativo."
+  },
+  {
+    id: "bowlby",
+    name: "John Bowlby",
+    years: "1907 – 1990",
+    framework: "Teoría del Apego",
+    fwClass: "fw-apego",
+    concepts: ["apego seguro", "figura de apego", "modelos operativos internos", "base segura"],
+    instruments: ["AAI", "ECR-R"],
+    relevance: "alta",
+    siaae: "Pertenencia institucional — el sentido de base segura en la institución predice retención y engagement académico.",
+    desc: "La teoría del apego de Bowlby describe cómo los modelos operativos internos desarrollados en la infancia modulan la capacidad del individuo para explorar el entorno y establecer vínculos de confianza, incluyendo con instituciones educativas."
+  },
+  {
+    id: "vygotsky",
+    name: "Lev Vygotsky",
+    years: "1896 – 1934",
+    framework: "Sociocultural",
+    fwClass: "fw-socio",
+    concepts: ["zona de desarrollo próximo", "andamiaje", "mediación", "habla interna"],
+    instruments: ["Observación clínica", "Tareas de mediación"],
+    relevance: "alta",
+    siaae: "Fase de Ejecución — el programa de tutores pares opera directamente en la ZDP de estudiantes con bajo rendimiento.",
+    desc: "Vygotsky plantea que el aprendizaje ocurre en la brecha entre lo que el estudiante puede hacer solo y lo que logra con apoyo (ZDP). El andamiaje adecuado es la clave para el desarrollo cognitivo y académico."
+  },
+  {
+    id: "winnicott",
+    name: "Donald Winnicott",
+    years: "1896 – 1971",
+    framework: "Relacional / Objeto",
+    fwClass: "fw-relacional",
+    concepts: ["objeto transicional", "espacio transicional", "holding", "falso self"],
+    instruments: [],
+    relevance: "media",
+    siaae: "Transición vital — el ingreso a la educación superior como espacio transicional que requiere holding institucional.",
+    desc: "Winnicott describe el desarrollo emocional en términos de holding, el falso self como adaptación defensiva, y los espacios transicionales como zonas de creatividad y exploración identitaria, altamente relevantes en la transición a la ES."
+  },
+  {
+    id: "frankl",
+    name: "Viktor Frankl",
+    years: "1905 – 1997",
+    framework: "Existencial / Logoterapia",
+    fwClass: "fw-existencial",
+    concepts: ["sentido de vida", "voluntad de sentido", "vacío existencial", "actitud ante el sufrimiento"],
+    instruments: ["PIL", "SONG"],
+    relevance: "media",
+    siaae: "Fase de Previsión — la orientación vocacional como construcción de sentido que ancla la motivación a largo plazo.",
+    desc: "Frankl propone que la búsqueda de sentido es la motivación primaria humana. En contextos educativos, el vacío existencial se manifiesta como falta de dirección vocacional, apatía académica y mayor vulnerabilidad a la deserción."
+  },
+  {
+    id: "linehan",
+    name: "Marsha Linehan",
+    years: "1943 –",
+    framework: "DBT / Conductual-Dialéctica",
+    fwClass: "fw-dbt",
+    concepts: ["regulación emocional", "tolerancia al malestar", "mindfulness", "efectividad interpersonal"],
+    instruments: ["DERS", "DASS-21"],
+    relevance: "alta",
+    siaae: "Fase de Ejecución — regulación emocional como habilitador del aprendizaje, especialmente en estudiantes de alta vulnerabilidad.",
+    desc: "La DBT de Linehan integra aceptación y cambio en un modelo de cuatro módulos. En educación superior, sus técnicas de regulación emocional y tolerancia al malestar son aplicables a talleres de manejo de estrés académico y crisis."
+  },
+  {
+    id: "siegel",
+    name: "Daniel Siegel",
+    years: "1957 –",
+    framework: "Neurobiología Interpersonal",
+    fwClass: "fw-neuro",
+    concepts: ["integración neuronal", "ventana de tolerancia", "mindfulness", "resonancia interpersonal"],
+    instruments: ["Mindfulness-based assessments"],
+    relevance: "alta",
+    siaae: "Transversal — la ventana de tolerancia como marco para comprender la regulación durante el ciclo de aprendizaje completo.",
+    desc: "Siegel integra neurociencia, psicología y práctica contemplativa. Su concepto de ventana de tolerancia es fundamental para entender cómo estados de hiper o hipoactivación impiden el aprendizaje efectivo en contextos de alta exigencia."
+  }
+];
+
+function renderAuthors() {
+  const grid = document.getElementById('authorsGrid');
+  authors.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'author-card';
+    card.onclick = () => openModal(a);
+    card.innerHTML = `
+      <span class="author-framework ${a.fwClass}">${a.framework}</span>
+      <h3 class="author-name">${a.name}</h3>
+      <p class="author-years">${a.years}</p>
+      <p class="author-concept">${a.concepts.slice(0,2).join(' · ')}</p>
+      <p class="author-relevance ${a.relevance === 'alta' ? 'rel-alta' : 'rel-media'}">
+        Relevancia ${a.relevance}
+      </p>
+      <span class="author-arrow">→</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openModal(a) {
+  const instrumentsHTML = a.instruments.length
+    ? a.instruments.map(i => `<span class="instrument">${i}</span>`).join('')
+    : '<span style="font-size:0.8rem;color:var(--muted)">Observación clínica</span>';
+
+  document.getElementById('modalBody').innerHTML = `
+    <p class="modal-framework">${a.framework}</p>
+    <h2 class="modal-name">${a.name}</h2>
+    <p class="modal-years">${a.years}</p>
+
+    <p class="modal-section-title">Conceptos clave</p>
+    <div class="modal-concepts">
+      ${a.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+    </div>
+
+    <p class="modal-section-title">Descripción</p>
+    <p class="modal-description">${a.desc}</p>
+
+    <p class="modal-section-title">Conexión SIAAE</p>
+    <div class="modal-siaae">${a.siaae}</div>
+
+    <p class="modal-section-title">Instrumentos derivados</p>
+    <div class="modal-instruments">${instrumentsHTML}</div>
+  `;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const devAuthors = [
+  {
+    id: "piaget",
+    name: "Jean Piaget",
+    years: "1896 – 1980",
+    area: "Desarrollo Cognitivo",
+    concepts: ["estadios cognitivos", "asimilación/acomodación", "equilibración", "operaciones concretas/formales"],
+    ageRange: "0–16 años",
+    desc: "Piaget propone que el desarrollo cognitivo ocurre en cuatro estadios invariantes y universales: sensoriomotor (0-2), preoperacional (2-7), operaciones concretas (7-12) y operaciones formales (12+). El niño no es un adulto pequeño — piensa cualitativamente diferente en cada etapa.",
+    edApplic: "Base para diseño instruccional según nivel cognitivo. En ES: los estudiantes de primer año llegan con pensamiento formal incipiente, no consolidado — especialmente en contextos de alta vulnerabilidad."
+  },
+  {
+    id: "erikson",
+    name: "Erik Erikson",
+    years: "1902 – 1994",
+    area: "Desarrollo Psicosocial",
+    concepts: ["8 crisis del desarrollo", "identidad vs. confusión", "industria vs. inferioridad", "generatividad"],
+    ageRange: "Ciclo vital completo",
+    desc: "Erikson describe 8 crisis psicosociales que se suceden a lo largo de toda la vida, cada una con un polo adaptativo y uno disfuncional. La resolución de cada crisis depende parcialmente del contexto relacional y cultural.",
+    edApplic: "Los estudiantes de ES atraviesan 'identidad vs. confusión de rol' — la crisis de la adultez emergente. La orientación vocacional y el sentido de pertenencia son intervenciones directas en esta crisis."
+  },
+  {
+    id: "stern",
+    name: "Daniel Stern",
+    years: "1934 – 2012",
+    area: "Desarrollo del Self",
+    concepts: ["self emergente", "self nuclear", "self subjetivo", "self narrativo", "sintonización afectiva"],
+    ageRange: "0–3 años (foco)",
+    desc: "Stern describe el desarrollo del self en capas sucesivas desde el nacimiento. Su concepto de sintonización afectiva — la capacidad del cuidador de responder en una modalidad sensorial diferente a la del bebé — es central para entender el desarrollo emocional temprano.",
+    edApplic: "La sintonización afectiva como modelo para el vínculo pedagógico. Los tutores y orientadores que 'sintonizan' con el estado emocional del estudiante generan condiciones de aprendizaje óptimas."
+  },
+  {
+    id: "tronick",
+    name: "Ed Tronick",
+    years: "1942 –",
+    area: "Regulación Mutua",
+    concepts: ["modelo de regulación mutua", "still face", "reparación", "estados de conciencia diádicos"],
+    ageRange: "0–12 meses (foco)",
+    desc: "Tronick demuestra con el experimento Still Face que el bebé espera activamente reciprocidad emocional. La ruptura y reparación del contacto emocional es el mecanismo central del aprendizaje relacional. La reparación es tan importante como la conexión.",
+    edApplic: "El ciclo ruptura-reparación como modelo de la relación pedagógica. Los docentes que reparan errores, quiebres de confianza y malentendidos construyen vínculos más sólidos que los que evitan el conflicto."
+  },
+  {
+    id: "schore",
+    name: "Allan Schore",
+    years: "1943 –",
+    area: "Neurobiología del Desarrollo",
+    concepts: ["regulación afectiva", "desarrollo hemisferio derecho", "apego y neurobiología", "trauma temprano"],
+    ageRange: "Prenatal–3 años (foco)",
+    desc: "Schore integra neurociencia y teoría del apego para mostrar que el cerebro derecho del bebé se desarrolla en relación directa con el cerebro derecho del cuidador durante los primeros dos años. El trauma relacional temprano altera la arquitectura neurológica de la regulación emocional.",
+    edApplic: "Los estudiantes con historia de trauma relacional temprano llegan a la ES con sistemas de regulación emocional comprometidos — no por falta de voluntad sino por arquitectura neurológica. El apoyo en ES es rehabilitador a nivel neurobiológico."
+  },
+  {
+    id: "bronfenbrenner",
+    name: "Urie Bronfenbrenner",
+    years: "1917 – 2005",
+    area: "Sistemas Ecológicos",
+    concepts: ["microsistema", "mesosistema", "exosistema", "macrosistema", "cronosistema"],
+    ageRange: "Ciclo vital completo",
+    desc: "Bronfenbrenner propone que el desarrollo ocurre en la intersección de sistemas anidados: desde el entorno inmediato (familia, aula) hasta el macrosistema cultural e histórico. Ninguna variable individual explica el desarrollo — siempre es persona en contexto.",
+    edApplic: "Marco para comprender la deserción como fenómeno ecosistémico. Un estudiante en riesgo está siendo afectado simultáneamente por microsistema (familia), exosistema (trabajo, barrio) y macrosistema (condiciones socioeconómicas)."
+  },
+  {
+    id: "gopnik",
+    name: "Alison Gopnik",
+    years: "1955 –",
+    area: "Ciencia Cognitiva del Desarrollo",
+    concepts: ["aprendizaje probabilístico", "mente linterna vs. mente foco", "counterfactual thinking", "niño como científico"],
+    ageRange: "0–6 años (foco)",
+    desc: "Gopnik propone que los bebés y niños pequeños son estadísticamente los mejores aprendices del planeta — utilizan aprendizaje probabilístico y razonamiento contrafáctico mucho antes de lo que se pensaba. La mente infantil es una 'linterna' (difusa, exploratoria) versus la del adulto que es un 'foco' (eficiente, restringida).",
+    edApplic: "Cuestiona modelos instruccionales rígidos en primera infancia. En ES: los adultos jóvenes aún conservan capacidad de aprendizaje exploratorio que el diseño curricular frecuentemente inhibe con estructuras excesivamente directivas."
+  },
+  {
+    id: "arnett",
+    name: "Jeffrey Arnett",
+    years: "1957 –",
+    area: "Adultez Emergente",
+    concepts: ["adultez emergente", "exploración identitaria", "inestabilidad", "autoenfoque", "sentido de posibilidades"],
+    ageRange: "18–29 años",
+    desc: "Arnett describe la adultez emergente (18-29) como etapa diferenciada del desarrollo en sociedades post-industriales. Cinco características: exploración identitaria intensa, inestabilidad, autoenfoque, sensación de 'entre medio' y apertura a posibilidades. Es el período de la educación superior.",
+    edApplic: "Marco teórico directo para comprender a los estudiantes de ES. Sus conductas 'erráticas' — cambios de carrera, ambivalencia vocacional, dificultad para comprometerse — son expresiones normativas de la adultez emergente, no patología."
+  }
+];
+
+function renderDevAuthors() {
+  const grid = document.getElementById('devAuthorsGrid');
+  devAuthors.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'dev-card';
+    card.onclick = () => openDevModal(a);
+    card.innerHTML = `
+      <span class="dev-age-badge">${a.ageRange}</span>
+      <h3 class="author-name">${a.name}</h3>
+      <p class="author-years">${a.years}</p>
+      <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;color:var(--slate);margin-bottom:0.6rem;text-transform:uppercase;">${a.area}</p>
+      <p class="author-concept">${a.concepts.slice(0,2).join(' · ')}</p>
+      <span class="author-arrow">→</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openDevModal(a) {
+  document.getElementById('modalBody').innerHTML = `
+    <p class="modal-framework">${a.area} · ${a.ageRange}</p>
+    <h2 class="modal-name">${a.name}</h2>
+    <p class="modal-years">${a.years}</p>
+
+    <p class="modal-section-title">Conceptos clave</p>
+    <div class="modal-concepts">
+      ${a.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+    </div>
+
+    <p class="modal-section-title">Núcleo teórico</p>
+    <p class="modal-description">${a.desc}</p>
+
+    <p class="modal-section-title">Aplicación en Educación Superior</p>
+    <div class="modal-siaae">${a.edApplic}</div>
+  `;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+renderDevAuthors();
+
+// ── LIBRARY ────────────────────────────────────────────────────────────────
+const library = [
+  { id:"piaget-1952", type:"libro", year:1952, authors:"Piaget, J.", title:"The Origins of Intelligence in Children", publisher:"Norton", categories:["desarrollo","aprendizaje"], annotation:"Piaget describe el desarrollo sensoriomotor en los dos primeros años de vida. Base de todos los estadios cognitivos posteriores — observaciones sistemáticas que transformaron la comprensión del desarrollo infantil.", language:"en", era:"clasico" },
+  { id:"erikson-1959", type:"libro", year:1959, authors:"Erikson, E.", title:"Identity and the Life Cycle", publisher:"Norton", categories:["desarrollo","salud-mental"], annotation:"Erikson presenta su modelo epigenético de ocho estadios psicosociales. Imprescindible para comprender la identidad en adolescencia y adultez emergente — período exacto del estudiante de ES.", language:"en", era:"clasico" },
+  { id:"bowlby-1969", type:"libro", year:1969, authors:"Bowlby, J.", title:"Attachment and Loss, Vol. 1: Attachment", publisher:"Basic Books", categories:["desarrollo","clinica"], annotation:"Texto fundacional del apego. Bowlby integra etología, psicoanálisis y cibernética para describir el sistema conductual de apego como necesidad biológica primaria.", language:"en", era:"clasico" },
+  { id:"rogers-1969", type:"libro", year:1969, authors:"Rogers, C. R.", title:"Freedom to Learn", publisher:"Merrill", categories:["clinica","aprendizaje"], annotation:"Rogers aplica la psicología centrada en la persona al contexto educativo. Propone al facilitador —no instructor— como agente del aprendizaje significativo. Lectura obligada para orientadores y docentes.", language:"en", era:"clasico" },
+  { id:"winnicott-1971", type:"libro", year:1971, authors:"Winnicott, D. W.", title:"Playing and Reality", publisher:"Tavistock", categories:["desarrollo","crianza"], annotation:"Desarrolla objeto y espacio transicional, holding y verdadero/falso self. Relevante para la crianza en la primera infancia y la transición vital del ingreso a la educación superior.", language:"en", era:"clasico" },
+  { id:"vygotsky-1978", type:"libro", year:1978, authors:"Vygotsky, L. S.", title:"Mind in Society", publisher:"Harvard University Press", categories:["desarrollo","aprendizaje"], annotation:"ZDP, andamiaje y mediación simbólica. Referencia ineludible en psicología educacional para el diseño de programas de tutoría pares y aprendizaje colaborativo.", language:"en", era:"clasico" },
+  { id:"beck-1979", type:"libro", year:1979, authors:"Beck, A. T. et al.", title:"Cognitive Therapy of Depression", publisher:"Guilford Press", categories:["clinica","salud-mental"], annotation:"El manual original de la TCC. Define distorsiones cognitivas, tríada cognitiva y técnicas de reestructuración. Indispensable para toda intervención cognitiva en bienestar estudiantil.", language:"en", era:"clasico" },
+  { id:"bronfenbrenner-1979", type:"libro", year:1979, authors:"Bronfenbrenner, U.", title:"The Ecology of Human Development", publisher:"Harvard University Press", categories:["desarrollo","aprendizaje"], annotation:"Modelo de sistemas ecológicos anidados. Transforma la comprensión de la deserción como fenómeno sistémico, no individual — el estudiante existe en micro, meso, exo y macrosistemas simultáneos.", language:"en", era:"clasico" },
+  { id:"stern-1985", type:"libro", year:1985, authors:"Stern, D. N.", title:"The Interpersonal World of the Infant", publisher:"Basic Books", categories:["desarrollo","crianza"], annotation:"Stern describe el desarrollo del self en capas sucesivas: emergente, nuclear, subjetivo y verbal. Lectura fundamental para crianza respetuosa y comprensión del vínculo temprano.", language:"en", era:"clasico" },
+  { id:"linehan-1993", type:"libro", year:1993, authors:"Linehan, M. M.", title:"Cognitive-Behavioral Treatment of BPD", publisher:"Guilford Press", categories:["clinica","salud-mental"], annotation:"Presentación original de la DBT. Base conceptual para módulos de regulación emocional, tolerancia al malestar, mindfulness y efectividad interpersonal, todos adaptables a psicoeducación en ES.", language:"en", era:"clasico" },
+  { id:"bandura-1997", type:"libro", year:1997, authors:"Bandura, A.", title:"Self-Efficacy: The Exercise of Control", publisher:"W. H. Freeman", categories:["clinica","aprendizaje"], annotation:"Obra cumbre de Bandura. Sistematiza dos décadas de investigación sobre autoeficacia, con capítulo específico en contexto académico. Indispensable para el sustento teórico del SIAAE.", language:"en", era:"clasico" },
+  { id:"siegel-1999", type:"libro", year:1999, authors:"Siegel, D. J.", title:"The Developing Mind (1st ed.)", publisher:"Guilford Press", categories:["desarrollo","clinica","crianza"], annotation:"Primera edición del texto que define la ventana de tolerancia, la integración neuronal y la resonancia interpersonal. Integra neurociencia, psicología del desarrollo y teoría del apego.", language:"en", era:"clasico" },
+  { id:"zimmerman-2000", type:"articulo", year:2000, authors:"Zimmerman, B. J.", title:"Attaining Self-Regulation: A Social Cognitive Perspective", publisher:"Handbook of Self-Regulation — Academic Press", categories:["aprendizaje"], annotation:"Capítulo fundacional del modelo cíclico en tres fases: previsión, ejecución y autorreflexión. Base conceptual directa del SIAAE. Cita obligada en toda investigación sobre autorregulación.", language:"en", era:"2000-2010" },
+  { id:"pintrich-2004", type:"articulo", year:2004, authors:"Pintrich, P. R.", title:"A Conceptual Framework for Assessing Motivation and Self-Regulated Learning in College Students", publisher:"Educational Psychology Review, 16(4)", categories:["aprendizaje","salud-mental"], annotation:"Presenta el MSLQ y su estructura factorial. Clave para el diseño de instrumentos de tamizaje en ES. Marco conceptual para medir motivación y autorregulación en universitarios.", language:"en", era:"2000-2010" },
+  { id:"tronick-2007", type:"libro", year:2007, authors:"Tronick, E.", title:"The Neurobehavioral and Social-Emotional Development of Infants and Children", publisher:"Norton", categories:["desarrollo","crianza"], annotation:"Compilación sobre regulación mutua y el experimento Still Face. Fundamental para comprender la co-regulación en los primeros meses de vida y su rol en el desarrollo emocional.", language:"en", era:"2000-2010" },
+  { id:"gopnik-2009", type:"libro", year:2009, authors:"Gopnik, A.", title:"The Philosophical Baby", publisher:"Farrar, Straus and Giroux", categories:["desarrollo","crianza"], annotation:"La mente del niño pequeño como el sistema de aprendizaje más eficiente del planeta. Desmonta mitos sobre el desarrollo infantil con evidencia cognitiva reciente. Lectura muy recomendada.", language:"en", era:"2000-2010" },
+  { id:"siegel-2011", type:"libro", year:2011, authors:"Siegel, D. J. & Bryson, T. P.", title:"The Whole-Brain Child", publisher:"Delacorte Press", categories:["desarrollo","crianza"], annotation:"Aplicación práctica de la neurobiología interpersonal a la crianza. Traduce integración y co-regulación en estrategias concretas para padres y educadores. Altamente recomendado.", language:"en", era:"2011-2019" },
+  { id:"porges-2011", type:"libro", year:2011, authors:"Porges, S. W.", title:"The Polyvagal Theory", publisher:"Norton", categories:["clinica","desarrollo","salud-mental"], annotation:"Los tres circuitos del sistema nervioso autónomo que determinan estados de seguridad, movilización o colapso. Revoluciona la comprensión de la regulación en trauma y aprendizaje bajo estrés.", language:"en", era:"2011-2019" },
+  { id:"siegel-2012", type:"libro", year:2012, authors:"Siegel, D. J.", title:"The Developing Mind (2nd ed.)", publisher:"Guilford Press", categories:["desarrollo","clinica"], annotation:"Segunda edición con nueva investigación en neurociencia. Desarrolla la ventana de tolerancia con mayor profundidad neurobiológica. Referencia actualizada para bienestar y aprendizaje.", language:"en", era:"2011-2019" },
+  { id:"vankolk-2014", type:"libro", year:2014, authors:"van der Kolk, B.", title:"The Body Keeps the Score", publisher:"Viking", categories:["clinica","salud-mental"], annotation:"30 años de investigación clínica sobre trauma. Cómo el trauma altera la arquitectura neurobiológica. Imprescindible para equipos de bienestar que trabajan con estudiantes de historia adversa.", language:"en", era:"2011-2019" },
+  { id:"linehan-2015", type:"libro", year:2015, authors:"Linehan, M. M.", title:"DBT Skills Training Manual (2nd ed.)", publisher:"Guilford Press", categories:["clinica","salud-mental","aprendizaje"], annotation:"Manual actualizado de habilidades DBT. Base para talleres de regulación emocional en ES. Incluye protocolo de crisis, mindfulness y nuevas fichas para psicoeducación grupal.", language:"en", era:"2011-2019" },
+  { id:"arnett-2015", type:"libro", year:2015, authors:"Arnett, J. J.", title:"Emerging Adulthood (2nd ed.)", publisher:"Oxford University Press", categories:["desarrollo","aprendizaje"], annotation:"Segunda edición del texto fundacional sobre adultez emergente. Marco teórico directo para comprender a los estudiantes de ES — su período de vida exacto. Incluye análisis cross-cultural.", language:"en", era:"2011-2019" },
+  { id:"gopnik-2016", type:"libro", year:2016, authors:"Gopnik, A.", title:"The Gardener and the Carpenter", publisher:"Farrar, Straus and Giroux", categories:["desarrollo","crianza"], annotation:"Crianza como jardinero vs. carpintero. Cuestiona la crianza intensiva y propone una visión más ecológica del acompañamiento infantil sustentada en evidencia cognitiva.", language:"en", era:"2011-2019" },
+  { id:"schore-2019", type:"libro", year:2019, authors:"Schore, A. N.", title:"The Development of the Unconscious Mind", publisher:"Norton", categories:["desarrollo","clinica"], annotation:"Sintetiza décadas de investigación sobre el hemisferio derecho y la regulación afectiva. Integra neurociencia, epigenética y apego en un modelo comprehensivo del desarrollo temprano.", language:"en", era:"2011-2019" },
+  { id:"siegel-bryson-2020", type:"libro", year:2020, authors:"Siegel, D. J. & Bryson, T. P.", title:"The Power of Showing Up", publisher:"Ballantine Books", categories:["desarrollo","crianza"], annotation:"La presencia consistente del cuidador construye el apego seguro más que la perfección. Relevante en familias con alta demanda laboral. Lectura práctica, sustentada y liberadora.", language:"en", era:"2020-presente" },
+  { id:"tronick-gold-2020", type:"libro", year:2020, authors:"Tronick, E. & Gold, C.", title:"The Power of Discord", publisher:"Little, Brown Spark", categories:["desarrollo","crianza","clinica"], annotation:"La ruptura y reparación —no la armonía constante— es el mecanismo central del desarrollo. Los malentendidos reparados fortalecen la resiliencia. Visión liberadora para padres y educadores.", language:"en", era:"2020-presente" },
+  { id:"perry-winfrey-2021", type:"libro", year:2021, authors:"Perry, B. D. & Winfrey, O.", title:"What Happened to You?", publisher:"Flatiron Books", categories:["clinica","salud-mental","desarrollo"], annotation:"Diálogo accesible sobre trauma. Cambia el paradigma de '¿qué está mal contigo?' a '¿qué te ocurrió?' Marco esencial para trabajo con estudiantes vulnerables en ES.", language:"en", era:"2020-presente" },
+  { id:"racine-2021", type:"articulo", year:2021, authors:"Racine, N. et al.", title:"Global Prevalence of Depressive and Anxiety Symptoms During COVID-19", publisher:"JAMA Pediatrics, 175(11)", categories:["salud-mental","desarrollo"], annotation:"Meta-análisis de 29 estudios. Documenta incremento sostenido de síntomas en jóvenes postpandemia. Relevante para comprender la salud mental actual de los estudiantes de ES.", language:"en", era:"2020-presente" },
+  { id:"arnett-2023", type:"articulo", year:2023, authors:"Arnett, J. J.", title:"Emerging Adulthood: The Ongoing Development of a Theory", publisher:"Emerging Adulthood, 11(3), 309–318", categories:["desarrollo","aprendizaje"], annotation:"Actualización 20 años después. Responde a críticas e incorpora perspectiva cross-cultural. Discute aplicabilidad en contextos de desigualdad socioeconómica — relevante para ES latinoamericana.", language:"en", era:"2020-presente" },
+  { id:"flores-2023", type:"articulo", year:2023, authors:"Flores-Flores, O. et al.", title:"Mental Health of University Students in Latin America: Systematic Review", publisher:"Cadernos de Saúde Pública, 39(6)", categories:["salud-mental","aprendizaje"], annotation:"Revisión sistemática en universitarios latinoamericanos. Alta prevalencia de ansiedad (30–50%) y depresión (20–35%), con diferencias por género y nivel socioeconómico. Referencia contextual directa para Chile.", language:"es", era:"2020-presente" },
+  { id:"siegel-2024", type:"libro", year:2024, authors:"Siegel, D. J.", title:"IntraConnected: MWe as the Integration of Self, Identity, and Belonging", publisher:"Norton", categories:["desarrollo","clinica","salud-mental"], annotation:"Siegel propone 'MWe' — integración entre yo individual y sentido de pertenencia. Conecta neurobiología, identidad y bienestar con implicancias directas para la pertenencia institucional en ES.", language:"en", era:"2020-presente" },
+  { id:"porges-2023", type:"libro", year:2023, authors:"Porges, S. W. & Dana, D.", title:"Clinical Applications of the Polyvagal Theory (2nd ed.)", publisher:"Norton", categories:["clinica","salud-mental"], annotation:"Segunda edición con aplicaciones de la teoría polivagal en trauma, ansiedad y regulación. Incluye capítulos sobre educación y contextos de alta exigencia. Marco neurobiológico para intervención en crisis.", language:"en", era:"2020-presente" }
+];
+
+const catLabels = { clinica:"Psicología Clínica", desarrollo:"Desarrollo", aprendizaje:"Aprendizaje", "salud-mental":"Salud Mental", crianza:"Crianza" };
+let libFilters = { era:"all", type:"all", cat:"all" };
+
+function renderLibrary() {
+  const grid = document.getElementById('libGrid');
+  const filtered = library.filter(b => {
+    if (libFilters.era !== "all" && b.era !== libFilters.era) return false;
+    if (libFilters.type !== "all" && b.type !== libFilters.type) return false;
+    if (libFilters.cat !== "all" && !b.categories.includes(libFilters.cat)) return false;
+    return true;
+  }).sort((a,b) => b.year - a.year);
+  document.getElementById('libCount').textContent = `${filtered.length} texto${filtered.length!==1?'s':''}`;
+  if (!filtered.length) { grid.innerHTML = '<div class="lib-empty">No hay textos con estos filtros.</div>'; return; }
+  grid.innerHTML = filtered.map(b => {
+    const pub = b.publisher ? `<p class="lib-publisher">${b.publisher}</p>` : '';
+    const cats = b.categories.map(c => `<span class="lib-cat cat-${c}">${catLabels[c]}</span>`).join('');
+    return `<div class="lib-card cat-${b.categories[0]}">
+      <div class="lib-meta"><span class="lib-year">${b.year}</span><span class="lib-type">${b.type}</span><span class="lib-lang">${b.language==='es'?'🇨🇱 ES':'🌐 EN'}</span></div>
+      <p class="lib-title">${b.title}</p>
+      <p class="lib-authors">${b.authors}</p>${pub}
+      <p class="lib-annotation">${b.annotation}</p>
+      <div class="lib-cats">${cats}</div></div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.lib-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const f = this.dataset.filter; libFilters[f] = this.dataset.val;
+    document.querySelectorAll(`.lib-btn[data-filter="${f}"]`).forEach(b => b.classList.remove('active'));
+    this.classList.add('active'); renderLibrary();
+  });
+});
+
+renderLibrary();
+
+// ── DSM-5 DATA ────────────────────────────────────────────────────────────
+const dsmData = [
+  { id:"tdm", code:"F32.x / 296.2x", dsm_version:"DSM-5-TR", name:"Trastorno Depresivo Mayor", chapter:"depresion", chapterLabel:"Trastornos Depresivos", prevalence_es:true, prevalence:"5–17% en universitarios (LAT); pico en primer año", summary:"Estado de ánimo deprimido o anhedonia presentes la mayor parte del día, casi todos los días, durante ≥2 semanas, con deterioro funcional significativo.", criteria:[{label:"A",text:"≥5 síntomas durante ≥2 semanas (al menos uno debe ser ánimo deprimido o anhedonia): ánimo deprimido, anhedonia, cambios de peso/apetito, insomnio/hipersomnia, agitación/enlentecimiento, fatiga, sentimientos de inutilidad/culpa, dificultad para concentrarse, pensamientos recurrentes de muerte."},{label:"B",text:"Los síntomas causan malestar clínico significativo o deterioro en áreas importantes del funcionamiento."},{label:"C",text:"El episodio no es atribuible a efectos fisiológicos de sustancias ni a otra afección médica."},{label:"D",text:"No se explica mejor por trastorno esquizoafectivo u otro trastorno del espectro psicótico."},{label:"E",text:"Nunca ha habido un episodio maníaco o hipomaníaco."}], specifiers:["Con ansiedad","Con características melancólicas","Con características atípicas","Con características psicóticas","Con inicio en el periparto","Con patrón estacional","Episodio único vs. recurrente","Leve / Moderado / Grave"], differential:"TAG (si predomina preocupación), Distimia/TPD (si ≥2 años), TB II (descartar hipomanía), Duelo (considerar contexto), Hipotiroidismo.", theory:[{author:"Beck",link:"Tríada cognitiva — distorsiones sobre uno mismo, el mundo y el futuro como mantenedores del episodio."},{author:"Bowlby",link:"Historia de pérdidas y rupturas de apego como factores de vulnerabilidad."},{author:"Siegel",link:"Integración neuronal reducida — hipoactivación prefrontal, hiperactivación amigdalar."},{author:"Linehan",link:"Regulación emocional comprometida como factor mantenedor."}], tx_first:["TCC (Beck — protocolo 16 sesiones)","Activación conductual","ISRS (fluoxetina, sertralina)","Terapia Interpersonal (TIP)"], tx_second:["IRSN (venlafaxina, duloxetina)","MBCT (prevención de recaídas)","Psicoterapia psicodinámica breve","Ejercicio aeróbico como coadyuvante"], instruments:["PHQ-9","BDI-II","HDRS (Hamilton)","MADRS"], es_context:"Causa principal de baja académica en ES. Señales: ausencias progresivas, entregas tardías sin comunicación, aislamiento, cambio brusco en rendimiento. Protocolo: tamizaje PHQ-9 → umbral ≥10 activa derivación estructurada." },
+  { id:"tag", code:"F41.1 / 300.02", dsm_version:"DSM-5-TR", name:"Trastorno de Ansiedad Generalizada", chapter:"ansiedad", chapterLabel:"Trastornos de Ansiedad", prevalence_es:true, prevalence:"15–25% en universitarios; debut frecuente en ES", summary:"Ansiedad y preocupación excesiva, difícil de controlar, sobre múltiples eventos durante ≥6 meses.", criteria:[{label:"A",text:"Ansiedad y preocupación excesivas sobre múltiples eventos o actividades, presentes la mayoría de los días durante ≥6 meses."},{label:"B",text:"La persona encuentra difícil controlar la preocupación."},{label:"C",text:"≥3 síntomas: inquietud/tensión, fatiga fácil, dificultad para concentrarse, irritabilidad, tensión muscular, trastorno del sueño."},{label:"D",text:"La ansiedad no se limita a características de otro trastorno."},{label:"E-F",text:"Malestar/deterioro funcional + no atribuible a sustancias ni afección médica."}], specifiers:["Leve / Moderado / Grave"], differential:"TOC (si foco exclusivo en obsesiones), Trastorno de pánico, TEPT, Depresión mayor (comórbido en 60%), Hipertiroidismo.", theory:[{author:"Beck",link:"Modelo cognitivo — sobreestimación de amenaza y subestimación de capacidad de afrontamiento."},{author:"Linehan",link:"Intolerancia al malestar y dificultad de regulación emocional como mantenedores."},{author:"Siegel",link:"Ventana de tolerancia reducida — hiperactivación sostenida del eje HHA."},{author:"Bandura",link:"Baja autoeficacia como amplificador de la preocupación anticipatoria."}], tx_first:["TCC (protocolo de preocupación de Borkovec)","ISRS / IRSN","Técnicas de relajación","MBSR"], tx_second:["Buspirona","Terapia de aceptación y compromiso (ACT)","Pregabalina (adultos)","Biofeedback"], instruments:["GAD-7","STAI","PSWQ","BAI"], es_context:"Se presenta como perfeccionismo disfuncional, procrastinación por miedo al fracaso y dificultad para delegar. GAD-7 en tamizaje inicial (umbral ≥8) con seguimiento en período de evaluaciones." },
+  { id:"tp", code:"F41.0 / 300.01", dsm_version:"DSM-5-TR", name:"Trastorno de Pánico", chapter:"ansiedad", chapterLabel:"Trastornos de Ansiedad", prevalence_es:true, prevalence:"2–4% en universitarios; consulta frecuente en urgencias", summary:"Crisis de pánico recurrentes e inesperadas seguidas de ≥1 mes de preocupación persistente o cambio de conducta relacionado.", criteria:[{label:"A",text:"Crisis de pánico recurrentes e inesperadas: oleada repentina de miedo intenso con ≥4 síntomas: palpitaciones, sudoración, temblores, disnea, sensación de ahogo, dolor torácico, náuseas, mareo, escalofríos, parestesias, desrealización/despersonalización, miedo a perder el control o a morir."},{label:"B",text:"≥1 mes de preocupación persistente por nuevas crisis O cambio de conducta desadaptativo."},{label:"C-D",text:"No atribuible a sustancias/afección médica. No explicado por otro trastorno."}], specifiers:["Con agorafobia","Sin agorafobia"], differential:"Cardiopatía (ECG previo), Hipertiroidismo, Hipoglucemia, TEPT, TAG, Sustancias.", theory:[{author:"Beck",link:"Modelo catastrófico de Clark — interpretación catastrófica de sensaciones corporales como amenaza vital."},{author:"Siegel",link:"Activación amigdalar con bypass cortical — respuesta sin procesamiento cognitivo previo."},{author:"Linehan",link:"Tolerancia al malestar como habilidad central para afrontar la activación fisiológica."}], tx_first:["TCC con exposición interoceptiva (Barlow)","ISRS (primera línea farmacológica)","Psicoeducación sobre el circuito del pánico"], tx_second:["Clonazepam (corto plazo)","IRSN","Exposición en vivo (con agorafobia)","MBSR"], instruments:["PDSS","ASI","PHQ-PD"], es_context:"Alta tasa de consulta a urgencias médicas antes del diagnóstico. En ES: estudiantes que colapsan en salas de examen o evitan espacios cerrados. Psicoeducación inmediata sobre el mecanismo del pánico como primera intervención." },
+  { id:"fobia-social", code:"F40.10 / 300.23", dsm_version:"DSM-5-TR", name:"Trastorno de Ansiedad Social", chapter:"ansiedad", chapterLabel:"Trastornos de Ansiedad", prevalence_es:true, prevalence:"5–12% en universitarios; impacto directo en participación", summary:"Miedo o ansiedad intensa ante situaciones sociales donde el individuo puede ser observado o evaluado negativamente.", criteria:[{label:"A",text:"Miedo o ansiedad intensa ante situaciones sociales de posible examen por otros."},{label:"B",text:"Teme actuar de manera que sea evaluado negativamente (humillación, vergüenza)."},{label:"C-D",text:"Situaciones casi siempre provocan miedo. Son evitadas o soportadas con ansiedad intensa."},{label:"E-G",text:"Miedo desproporcionado al contexto. Duración ≥6 meses. Deterioro funcional significativo."}], specifiers:["Solo actuación (si el miedo se limita a hablar o actuar en público)"], differential:"TAG, Trastorno de pánico con agorafobia, Mutismo selectivo, TEA.", theory:[{author:"Beck",link:"Esquemas de defectuosidad social — hipervigilancia a señales de evaluación negativa."},{author:"Bandura",link:"Baja autoeficacia social — creencias de incompetencia que generan profecías autocumplidas."},{author:"Rogers",link:"Necesidad de consideración positiva condicionada — núcleo del miedo al rechazo."}], tx_first:["TCC con exposición gradual","ISRS","Entrenamiento en habilidades sociales","Role-playing y retroalimentación"], tx_second:["IRSN","Beta-bloqueadores (actuaciones puntuales)","ACT","Terapia grupal"], instruments:["LSAS","SPIN","SPS / SIAS"], es_context:"Se manifiesta como evitación de presentaciones orales, incapacidad de hacer preguntas en clase, no acudir a tutorías. Acomodación académica (Ley 21.369) puede incluir formato alternativo de evaluación mientras se trabaja el trastorno." },
+  { id:"tept", code:"F43.10 / 309.81", dsm_version:"DSM-5-TR", name:"Trastorno de Estrés Postraumático", chapter:"trauma", chapterLabel:"Trastornos Relacionados con Trauma", prevalence_es:true, prevalence:"3–7% en universitarios; mayor en mujeres y grupos vulnerables", summary:"Exposición a evento traumático con síntomas intrusivos, evitación, alteraciones cognitivas/emocionales y reactividad aumentada durante >1 mes.", criteria:[{label:"A",text:"Exposición a muerte real o amenaza, lesión grave o violencia sexual (directa, testigo, conocimiento de familiar, exposición repetida a detalles)."},{label:"B",text:"Síntomas intrusivos: recuerdos intrusivos, pesadillas, flashbacks, malestar intenso ante señales del trauma."},{label:"C",text:"Evitación de recuerdos, pensamientos o recordatorios externos del trauma."},{label:"D",text:"Alteraciones cognitivas y del ánimo: amnesia, creencias negativas, culpa distorsionada, emociones negativas persistentes, anhedonia, alienación."},{label:"E-H",text:"Hipervigilancia, sobresalto exagerado, alteraciones del sueño. Duración >1 mes. Deterioro funcional. No atribuible a sustancias."}], specifiers:["Con síntomas disociativos","Con expresión retardada (≥6 meses post-evento)"], differential:"TEA (si duración <1 mes), TAG, TDM, Trastorno de adaptación, TLP (puede ser comórbido), Lesión cerebral.", theory:[{author:"van der Kolk",link:"Trauma almacenado en el cuerpo — memoria traumática como fragmentos sensoriales, no narrativa."},{author:"Siegel",link:"Ventana de tolerancia colapsada — flashbacks como activación del circuito de amenaza sin contexto temporal."},{author:"Porges",link:"El trauma fija el sistema en estados de movilización (lucha/huida) o colapso (dorsal vagal)."},{author:"Bowlby",link:"El trauma relacional compromete los MOI y la capacidad de usar figuras de apoyo."}], tx_first:["EMDR (Shapiro — mayor evidencia)","TCC centrada en el trauma (CPT / PE de Foa)","ISRS (sertralina, paroxetina — FDA aprobados)"], tx_second:["Terapia narrativa de exposición","Terapia somática (Sensorimotor Psychotherapy)","Prazosina (para pesadillas)","Terapia grupal de trauma"], instruments:["PCL-5","CAPS-5 (gold standard)","IES-R"], es_context:"Alta prevalencia en estudiantes con historia de maltrato, violencia de género o violencia sociopolítica. Afecta concentración, memoria y aprendizaje. Protocolo: derivación especializada prioritaria + acomodaciones académicas." },
+  { id:"tdah", code:"F90.x / 314.0x", dsm_version:"DSM-5-TR", name:"TDAH — Trastorno por Déficit de Atención", chapter:"tdah", chapterLabel:"Trastornos del Neurodesarrollo", prevalence_es:true, prevalence:"5–8% en universitarios; frecuentemente no diagnosticado hasta ES", summary:"Patrón persistente de inatención y/o hiperactividad-impulsividad que interfiere con el funcionamiento. Síntomas presentes antes de los 12 años en ≥2 entornos.", criteria:[{label:"A-Inat.",text:"≥6 síntomas de inatención (≥5 si ≥17 años): no presta atención a detalles, dificultad mantener atención, parece no escuchar, no sigue instrucciones, dificultad organización, evita tareas sostenidas, pierde objetos, distraído, olvidadizo."},{label:"A-Hiper.",text:"≥6 síntomas de hiperactividad/impulsividad (≥5 si ≥17 años): mueve manos/pies, abandona asiento, corre/trepa inapropiadamente, no puede jugar calmado, habla excesivo, responde antes de terminar pregunta, dificultad esperar turno, interrumpe."},{label:"B-E",text:"Síntomas presentes antes de los 12 años. En ≥2 entornos. Interferencia clara con funcionamiento. No explicado mejor por otro trastorno."}], specifiers:["Presentación predominantemente inatenta (TDAH-I)","Presentación hiperactiva/impulsiva (TDAH-HI)","Presentación combinada (TDAH-C)","En remisión parcial","Leve / Moderado / Grave"], differential:"TDM (pseudoiratención por rumiación), TAG, TEPT, Trastorno del sueño, TEA, Dificultades de aprendizaje.", theory:[{author:"Siegel",link:"Disfunción en redes de integración prefrontal — dificultad en regulación top-down de atención y conducta."},{author:"Bandura",link:"Baja autoeficacia crónica por historial de fracasos repetidos en tareas de atención sostenida."},{author:"Vygotsky",link:"Habla interna como herramienta de autorregulación — su desarrollo está comprometido, afectando la planificación."}], tx_first:["Metilfenidato / Anfetaminas (primera línea farmacológica)","TCC adaptada para adultos (Safren)","Entrenamiento en funciones ejecutivas","Coaching académico estructurado"], tx_second:["Atomoxetina (no estimulante)","Mindfulness adaptado","Acomodaciones académicas","Bupropión (alternativa)"], instruments:["ASRS-v1.1","CAARS","Conners-3","Evaluación neuropsicológica (Stroop, TMT, CPT)"], es_context:"El TDAH-I es subdiagnosticado en ES — el estudiante parece 'vago'. Ley 21.369: derecho a acomodaciones (tiempo extendido, sala separada). PAEDIS debe tener protocolo de acomodación con criterios diagnósticos documentados." },
+  { id:"tea", code:"F84.0 / 299.00", dsm_version:"DSM-5-TR", name:"Trastorno del Espectro Autista", chapter:"tdah", chapterLabel:"Trastornos del Neurodesarrollo", prevalence_es:false, prevalence:"1–2% en universitarios; muchos llegan sin diagnóstico previo", summary:"Déficits persistentes en comunicación social + patrones restrictivos/repetitivos. Presente desde el desarrollo temprano.", criteria:[{label:"A",text:"Déficits persistentes en comunicación e interacción social: déficits en reciprocidad socioemocional, en comunicación no verbal, en desarrollo/mantenimiento de relaciones."},{label:"B",text:"Patrones restrictivos y repetitivos (≥2): movimientos/habla estereotipados, insistencia en rutinas, intereses fijos restrictivos, respuestas sensoriales hiper/hiporreactivas."},{label:"C-E",text:"Presentes desde el desarrollo temprano. Causan deterioro significativo. No explicados por discapacidad intelectual."}], specifiers:["Nivel de apoyo requerido (1/2/3)","Con/sin discapacidad intelectual","Con/sin compromiso del lenguaje","Con catatonía"], differential:"TDAH (puede ser comórbido), Ansiedad social, TOC, Discapacidad intelectual.", theory:[{author:"Siegel",link:"Diferencias en integración neuronal — patrones alternativos de conectividad, no déficit sino diferencia."},{author:"Stern",link:"Desarrollo atípico de la intersubjetividad — sintonización afectiva diferente, no ausente."},{author:"Bronfenbrenner",link:"El entorno es determinante — TEA nivel 1 en entorno inclusivo vs. excluyente tiene desenlaces radicalmente distintos."}], tx_first:["Apoyo en habilidades sociales (grupos)","Acomodaciones ambientales y curriculares","Psicoeducación a la comunidad educativa","ABA solo en infancia temprana"], tx_second:["TCC adaptada (para comorbilidades)","Terapia ocupacional (procesamiento sensorial)","Coaching en funcionamiento ejecutivo"], instruments:["ADOS-2 (gold standard)","ADI-R","AQ (adultos)","RAADS-R"], es_context:"Estudiantes TEA llegan frecuentemente enmascarados. El colapso ocurre ante cambios imprevistos o sobrecarga sensorial. Ley 21.369 + PAEDIS: acomodaciones específicas, espacios de descompresión, anticipación de cambios." },
+  { id:"tlp", code:"F60.3 / 301.83", dsm_version:"DSM-5-TR", name:"Trastorno Límite de la Personalidad", chapter:"personalidad", chapterLabel:"Trastornos de la Personalidad", prevalence_es:true, prevalence:"1–6% en universitarios; alta tasa de crisis en ES", summary:"Inestabilidad en relaciones, autoimagen y afectos con impulsividad marcada. Debut en adultez temprana — período exacto de ES.", criteria:[{label:"A",text:"≥5 de 9 criterios: esfuerzos para evitar abandono; relaciones inestables e intensas; alteración de identidad; impulsividad en ≥2 áreas; conducta suicida/autolesiva recurrente; inestabilidad afectiva; sentimientos crónicos de vacío; ira inapropiada/intensa; ideación paranoide transitoria o disociación bajo estrés."}], specifiers:["Especificar gravedad actual"], differential:"Trastorno bipolar (inestabilidad en horas/días vs. semanas), TEPT (puede ser comórbido), TDM, TDAH.", theory:[{author:"Linehan",link:"Modelo biosocial — vulnerabilidad biológica + entorno invalidante crónico. DBT es el tratamiento de mayor evidencia."},{author:"Bowlby",link:"Apego desorganizado como sustrato del terror al abandono."},{author:"Schore",link:"Trauma relacional temprano que altera el desarrollo del sistema de regulación afectiva."},{author:"Winnicott",link:"Falso self extremo como adaptación a entorno invalidante."}], tx_first:["DBT (Linehan — mayor evidencia)","Terapia Basada en Mentalización (MBT)","Terapia Centrada en Esquemas (Young)"], tx_second:["Estabilizadores del ánimo (valproato, lamotrigina)","ISRS (síntomas depresivos comórbidos)","TFP (Terapia Focalizada en la Transferencia)"], instruments:["ZAN-BPD","MSI-BPD (tamizaje breve)","BPDSI-IV","DIB-R"], es_context:"Se presenta como crisis relacionales con docentes o pares, autolesiones en períodos de alta exigencia. Requiere coordinación entre bienestar, psiquiatría y jefatura académica. El setting consistente es terapéutico — evitar rechazo y sobreinvolucración." },
+  { id:"ta-ano", code:"F50.01 / 307.1", dsm_version:"DSM-5-TR", name:"Anorexia Nerviosa", chapter:"tca", chapterLabel:"Trastornos Alimentarios", prevalence_es:true, prevalence:"0.5–1.5% en universitarias; alta mortalidad — derivación prioritaria", summary:"Restricción de ingesta que lleva a bajo peso significativo, miedo intenso a ganar peso y alteración de percepción corporal.", criteria:[{label:"A",text:"Restricción de la ingesta que conduce a peso corporal significativamente bajo para la edad, sexo y trayectoria de desarrollo."},{label:"B",text:"Miedo intenso a ganar peso, incluso estando con peso significativamente bajo. O conducta que interfiere con el aumento de peso."},{label:"C",text:"Alteración en la percepción del propio peso/constitución; influencia indebida del peso en la autoevaluación; falta de reconocimiento de la gravedad del bajo peso."}], specifiers:["Tipo restrictivo","Tipo con atracones/purgas","Leve (IMC ≥17) / Moderado (16–16.99) / Grave (15–15.99) / Extremo (<15)"], differential:"Bulimia nerviosa (peso normal + purgas), ARFID (sin distorsión corporal), TDM con pérdida de apetito, Enfermedad médica.", theory:[{author:"Bowlby",link:"El cuerpo como único dominio controlable ante experiencias de desamparo vinculadas al apego."},{author:"Siegel",link:"Interoceptividad alterada — dificultad para percibir señales corporales de hambre/saciedad."},{author:"Beck",link:"Distorsiones cognitivas específicas sobre el cuerpo y el control como mantenedores centrales."},{author:"Rogers",link:"Autoconcepto basado exclusivamente en peso — ausencia de valía incondicional."}], tx_first:["Rehabilitación nutricional (prioritaria — sin ella no hay psicoterapia efectiva)","TCC para TCA (Fairburn)","FBT (Terapia Basada en Familia) para menores","Hospitalización si IMC<15 o complicaciones"], tx_second:["ACT","TEPT concurrente — tratar simultáneamente","Olanzapina (bajo evidencia para peso)"], instruments:["EDE-Q","EAT-26","SCOFF (tamizaje 5 ítems)","PHQ-9"], es_context:"Derivación a especialista en TCA es el rol de bienestar — no tratar. Acomodaciones académicas mientras la persona está en tratamiento. El protocolo de derivación debe activarse ante cualquier sospecha — la demora aumenta riesgo vital." },
+  { id:"ta-bul", code:"F50.2 / 307.51", dsm_version:"DSM-5-TR", name:"Bulimia Nerviosa", chapter:"tca", chapterLabel:"Trastornos Alimentarios", prevalence_es:true, prevalence:"1–3% en universitarios; más prevalente que AN", summary:"Episodios recurrentes de atracones + conductas compensatorias, ≥1 vez/semana durante ≥3 meses, con autoevaluación influida por el peso.", criteria:[{label:"A",text:"Episodios recurrentes de atracones: ingesta en período corto de cantidad mayor con sensación de pérdida de control."},{label:"B",text:"Conductas compensatorias inapropiadas: vómito, laxantes, ayuno, ejercicio excesivo."},{label:"C-E",text:"≥1 vez/semana durante ≥3 meses. Autoevaluación influida por peso. No exclusivamente durante AN."}], specifiers:["Leve (1–3/sem) / Moderado (4–7) / Grave (8–13) / Extremo (≥14)"], differential:"AN tipo purgativo (bajo peso), TCAP (sin compensación), TDM, TLP (impulsividad general).", theory:[{author:"Beck",link:"Ciclo cognitivo: restricción → desinhibición → atracón → culpa → compensación."},{author:"Linehan",link:"Desregulación emocional — el atracón como regulador del afecto negativo."},{author:"Bowlby",link:"El ciclo atracón/purga como ciclo de proximidad/rechazo con figura de apego externalizada al cuerpo."}], tx_first:["TCC para TCA (Fairburn — 20 sesiones)","ISRS (fluoxetina 60mg — única aprobada FDA para BN)","TIP como alternativa"], tx_second:["DBT adaptada para TCA","ACT","Naltrexona + bupropión (en estudio)"], instruments:["EDE-Q","BULIT-R","SCOFF","PHQ-9"], es_context:"Frecuentemente oculta en ES. Señales: visitas al baño post-comida, cambios de humor intensos, erosión dental. Ante autorrevelación: validar, no dramatizar, derivar a especialista en TCA sin demora." },
+  { id:"tad", code:"F43.20 / 309.xx", dsm_version:"DSM-5-TR", name:"Trastorno de Adaptación", chapter:"adapta", chapterLabel:"Trastornos Relacionados con Estrés", prevalence_es:true, prevalence:"10–20% en universitarios de primer año — altamente prevalente", summary:"Síntomas emocionales/conductuales desproporcionados al factor estresante, dentro de 3 meses del inicio, sin exceder 6 meses tras su cesación.", criteria:[{label:"A",text:"Síntomas emocionales o conductuales en respuesta a factor estresante identificable, dentro de los 3 meses del inicio."},{label:"B-E",text:"Desproporcionados a lo esperado. No cumplen criterios para otro trastorno. No representan duelo normal. No persisten >6 meses tras cesar el factor."}], specifiers:["Con ánimo deprimido","Con ansiedad","Con ánimo mixto ansioso-deprimido","Con alteración de la conducta","Sin especificar"], differential:"TEPT/TEA (si hay trauma), TDM (si cumple criterios completos), Duelo (respuesta normativa).", theory:[{author:"Bronfenbrenner",link:"La adaptación es siempre persona-en-entorno — el mismo cambio puede ser mayor o menor según sistemas de apoyo disponibles."},{author:"Winnicott",link:"Transición vital como ruptura del espacio transicional — el ingreso a ES es el factor estresante más frecuente."},{author:"Frankl",link:"Cuando el cambio priva de sentido, la adaptación falla — la re-significación es el mecanismo terapéutico central."},{author:"Rogers",link:"Incongruencia entre autoconcepto y nueva realidad — la adaptación requiere actualización del self."}], tx_first:["Psicoterapia breve de apoyo (4–8 sesiones)","Intervención en crisis","Psicoeducación sobre normalidad del proceso adaptativo","Activación conductual y reestructuración de rutinas"], tx_second:["ISRS (si síntomas persistentes o graves)","Terapia de resolución de problemas","Grupos de apoyo entre pares"], instruments:["DASS-21","K10 (Kessler)","GAD-7 + PHQ-9 (para descartar trastornos mayores)"], es_context:"El diagnóstico más prevalente en primer año. El ingreso a la universidad es el factor estresante por definición. Bienestar estudiantil es el dispositivo natural de primera acogida — no requiere derivación psiquiátrica en la mayoría de los casos." },
+  { id:"insomnio", code:"F51.01 / 307.42", dsm_version:"DSM-5-TR", name:"Trastorno de Insomnio", chapter:"sueno", chapterLabel:"Trastornos del Sueño", prevalence_es:true, prevalence:"20–35% en universitarios; altamente subestimado", summary:"Insatisfacción con la calidad o cantidad del sueño, ≥3 noches/semana durante ≥3 meses, con deterioro del funcionamiento diurno.", criteria:[{label:"A",text:"Insatisfacción con calidad/cantidad del sueño con ≥1 síntoma: dificultad para iniciar, mantener (despertares frecuentes) o despertar precoz sin reanudar."},{label:"B-G",text:"Causa malestar o deterioro funcional. Ocurre ≥3 noches/semana. Duración ≥3 meses. No atribuible a oportunidad inadecuada, otro trastorno del sueño ni sustancias."}], specifiers:["Con comorbilidad no relacionada al sueño","Episódico (<3 meses) / Persistente (≥3) / Recurrente"], differential:"Higiene del sueño inadecuada, Apnea (CPAP), Síndrome de fase retrasada, TAG (insomnio como síntoma).", theory:[{author:"Siegel",link:"El sueño es el período principal de consolidación de memorias y regulación emocional — el insomnio compromete el aprendizaje directamente."},{author:"Beck",link:"Modelo cognitivo del insomnio — pensamientos catastróficos sobre el no dormir mantienen la hiperactivación."},{author:"Linehan",link:"La privación de sueño es factor de vulnerabilidad emocional central en DBT — 'PLEASE' incluye dormir."}], tx_first:["TCC-I (mayor evidencia a largo plazo)","Restricción del sueño (paradójico pero eficaz)","Control de estímulos","Psicoeducación sobre higiene del sueño"], tx_second:["Melatonina (síndrome de fase retrasada)","Trazodona / Mirtazapina (con depresión comórbida)","Zolpidem (solo corto plazo)","Suvorexant (antagonista orexina)"], instruments:["ISI","PSQI","ESS (somnolencia diurna)","Diario de sueño (2 semanas)"], es_context:"El ciclo circadiano retrasado es normativo en universitarios pero puede cronificarse. Impacto directo en consolidación de memoria y regulación emocional. TCC-I grupal breve (4–6 sesiones) es factible en bienestar estudiantil y altamente costo-efectivo." },
+  { id:"tb2", code:"F31.81 / 296.89", dsm_version:"DSM-5-TR", name:"Trastorno Bipolar II", chapter:"bipolar", chapterLabel:"Trastornos Bipolares", prevalence_es:true, prevalence:"0.5–2% universitarios; frecuentemente confundido con TDM o TLP", summary:"≥1 episodio hipomaníaco + ≥1 episodio depresivo mayor. Sin episodios maníacos ni psicóticos plenos.", criteria:[{label:"A-D",text:"Criterios cumplidos para ≥1 episodio hipomaníaco y ≥1 depresivo mayor. Nunca ha habido episodio maníaco. No explicado por trastorno psicótico. Síntomas causan deterioro funcional significativo."},{label:"Hipomanía",text:"Estado de ánimo elevado/expansivo/irritable + aumento de energía durante ≥4 días consecutivos + ≥3 síntomas: autoestima elevada, disminución de sueño, logorrea, pensamiento acelerado, distractibilidad, aumento actividad, conducta placentera de riesgo."}], specifiers:["Con ansiedad","Con características mixtas","Con ciclos rápidos (≥4 episodios/año)","Con rasgos melancólicos/atípicos/psicóticos","Con patrón estacional"], differential:"TDM (descartar hipomanías pasadas), TLP (inestabilidad en horas vs. días), TDAH, TB I.", theory:[{author:"Beck",link:"En fase depresiva: tríada cognitiva. En hipomanía: pensamientos positivos automáticos vividos como insight pero que son síntoma."},{author:"Siegel",link:"Integración neuronal oscilante — alternancia de hiperconectividad/hipoconectividad prefrontal-límbica."},{author:"Linehan",link:"Las habilidades DBT son efectivas como complemento — especialmente regulación emocional y tolerancia al malestar."}], tx_first:["Estabilizadores del ánimo (litio; lamotrigina para depresión)","Quetiapina (aprobada FDA para ambas fases en TB II)","Psicoeducación (programa Barcelona o Fristad)"], tx_second:["TCC adaptada para TB (Lam)","IPSRT (Terapia Interpersonal y de Ritmo Social)","Lurasidona (fase depresiva)","FFT (Terapia Focalizada en la Familia)"], instruments:["MDQ (tamizaje)","HCL-32","YMRS","QIDS-SR"], es_context:"En ES frecuentemente se diagnostica TDM y se prescribe ISRS en monoterapia — puede precipitar hipomanía. Señales: productividad explosiva seguida de caída, no dormir pero sentirse bien, proyectos grandiosos sin término. El diagnóstico correcto cambia completamente el tratamiento." },
+  { id:"esquizofrenia", code:"F20.9 / 295.90", dsm_version:"DSM-5-TR", name:"Esquizofrenia", chapter:"psicosis", chapterLabel:"Espectro de la Esquizofrenia", prevalence_es:false, prevalence:"0.5–1% población; debut frecuente en adultez temprana", summary:"≥2 síntomas característicos durante ≥1 mes con signos continuos ≥6 meses y deterioro del funcionamiento.", criteria:[{label:"A",text:"≥2 síntomas durante ≥1 mes (al menos 1 debe ser 1, 2 o 3): 1) Delirios, 2) Alucinaciones, 3) Lenguaje desorganizado, 4) Conducta desorganizada o catatonía, 5) Síntomas negativos."},{label:"B-F",text:"Deterioro marcado en funcionamiento. Signos continuos ≥6 meses. Exclusión de trastorno esquizoafectivo, depresivo/bipolar con psicosis, sustancias, afección médica y TEA."}], specifiers:["Primer episodio en episodio agudo/remisión","Episodios múltiples","Continuo","Con catatonía","Leve/Moderado/Grave"], differential:"Trastorno esquizoafectivo, Psicosis breve (<1 mes), Trastorno esquizofreniforme (1–6 meses), Psicosis inducida por sustancias.", theory:[{author:"Siegel",link:"Disintegración de redes neuronales — fragmentación de la experiencia subjetiva coherente del self."},{author:"Bronfenbrenner",link:"El entorno psicosocial es determinante en el desenlace funcional — factor vulnerabilidad-estrés."}], tx_first:["Antipsicóticos segunda generación (risperidona, olanzapina, aripiprazol)","Intervención temprana en psicosis (programas IEP/EPPIC)","Psicoeducación familiar","Coordinación psiquiátrica obligatoria"], tx_second:["Clozapina (psicosis resistente)","Terapia Cognitiva para Psicosis (TCp)","Rehabilitación psicosocial","Empleo con apoyo"], instruments:["PANSS","BPRS","SOFAS","Calgary (depresión en esquizofrenia)"], es_context:"El debut psicótico ocurre entre 18–25 años — período exacto de ES. Señales: aislamiento progresivo, conducta bizarra, colapso súbito sin causa académica, creencias extrañas en trabajos escritos. Protocolo: derivación psiquiátrica urgente + coordinación con familia (si autorizado)." },
+  { id:"tod", code:"F91.3 / 313.81", dsm_version:"DSM-5-TR", name:"Trastorno Oposicionista Desafiante", chapter:"disruptivo", chapterLabel:"Trastornos Disruptivos", prevalence_es:false, prevalence:"3–5% en niños/adolescentes; pico 6–10 años", summary:"Patrón de humor irritable/colérico, conducta desafiante/argumentativa y actitud vengativa, durante ≥6 meses, en ≥1 entorno con persona que no sea hermano.", criteria:[{label:"A1 — Humor",text:"A menudo pierde la calma. A menudo susceptible o fácil de importunar. A menudo enfadado y resentido."},{label:"A2 — Conducta",text:"A menudo discute con figuras de autoridad. A menudo desafía o rechaza cumplir reglas. Molesta deliberadamente a otros. Culpa a otros de sus errores."},{label:"A3 — Vengativo",text:"Ha sido rencoroso o vengativo ≥2 veces en los últimos 6 meses."},{label:"B-C",text:"Asociado a malestar del individuo o su entorno O impacto en funcionamiento. No ocurre exclusivamente en contexto de trastorno psicótico, sustancias, depresivo, bipolar, TDAH ni trastorno de conducta."}], specifiers:["Leve (1 entorno)","Moderado (≥2 entornos)","Grave (≥3 entornos)"], differential:"TDAH (irritabilidad secundaria a frustración), TDM (irritabilidad como síntoma), Trastorno de conducta (TOD puede precederlo), TEA (inflexibilidad vs. desafío), TB pediátrico.", theory:[{author:"Siegel",link:"La conducta oposicionista es expresión de un sistema nervioso en defensa — el desafío como respuesta a amenaza percibida en la relación de autoridad."},{author:"Tronick",link:"Modelo ruptura-reparación — alta sensibilidad a las rupturas y dificultad para confiar en la reparación."},{author:"Linehan",link:"Vulnerabilidad temperamental + entorno invalidante produce desregulación conductual — modelo biosocial aplicado."},{author:"Bowlby",link:"El desafío a la autoridad como activación del sistema de apego — búsqueda de respuesta consistente del cuidador."}], tx_first:["Parent Management Training (PMT de Kazdin)","Parent-Child Interaction Therapy (PCIT) — preescolar/escolar","Collaborative Problem Solving (Greene — 'The Explosive Child')","TCC para regulación emocional del niño"], tx_second:["DBT adolescentes","Mediación escolar","Entrenamiento en habilidades sociales","Farmacoterapia solo si comorbilidad TDAH — no para TOD en sí"], instruments:["CBCL (Achenbach)","SDQ","Conners-3","BRIEF (funciones ejecutivas)"], es_context:"El TOD no es desobediencia ni mala crianza — es un patrón neurobiológico de respuesta al estrés relacional. Intervención central en cuidadores: anticipar conflictos, co-regular antes del colapso, establecer límites con estructura y calma. El objetivo es la colaboración, no la obediencia." },
+  { id:"tept-c", code:"6B41 (CIE-11)", dsm_version:"CIE-11 / No en DSM-5 formal", name:"TEPT Complejo — Trauma Complejo", chapter:"trauma", chapterLabel:"Trastornos Relacionados con Trauma", prevalence_es:true, prevalence:"3–10% en universitarios con historia de trauma crónico", summary:"No incluido formalmente en DSM-5 pero sí en CIE-11 (6B41). Trauma crónico/repetido que genera síntomas TEPT + desregulación afectiva, alteraciones de identidad y relacionales.", criteria:[{label:"CIE-11 A",text:"Todos los criterios del TEPT (re-experimentación, evitación, amenaza actual persistente)."},{label:"CIE-11 B",text:"Desregulación afectiva: dificultad para regular emociones, estados disfóricos persistentes, respuestas explosivas o disociativas."},{label:"CIE-11 C",text:"Autopercepciones negativas: creencias persistentes de incompetencia, vergüenza profunda y fracaso vinculados al trauma."},{label:"CIE-11 D",text:"Alteraciones relacionales: dificultad para mantener relaciones, sentimientos de distancia y alienación."},{label:"Contexto",text:"Maltrato infantil crónico, violencia doméstica, abuso sexual prolongado, tortura, cautiverio, negligencia severa."}], specifiers:["Ver TEPT en DSM-5 para especificadores aplicables","En CIE-11: categoría diagnóstica independiente"], differential:"TEPT (sin alteraciones de identidad profundas), TLP (alta superposición), Depresión crónica.", theory:[{author:"van der Kolk",link:"El trauma complejo altera el desarrollo del self, la regulación afectiva y la capacidad de relacionarse."},{author:"Schore",link:"El trauma relacional crónico reconfigura la arquitectura neurobiológica del hemisferio derecho."},{author:"Bowlby",link:"El trauma crónico relacional destruye los MOI — figura de cuidado y fuente de daño son la misma persona, lo que desorganiza el apego."},{author:"Linehan",link:"DBT fue diseñada para perfiles que hoy reconoceríamos como TEPT-C + TLP — la mayor evidencia empírica disponible."}], tx_first:["Modelo trifásico (Herman): 1) Seguridad, 2) Procesamiento, 3) Integración","EMDR (fase por fase)","Terapia Sensoriomotriz (Ogden)","DBT-PTSD (Bohus — mayor evidencia combinada)"], tx_second:["Somatic Experiencing (Levine)","Terapia narrativa de exposición","ISRS (solo para síntomas específicos)","Grupos de procesamiento con supervisión"], instruments:["ITQ (International Trauma Questionnaire — CIE-11)","PCL-5 + LEC","SIDES"], es_context:"Alta prevalencia oculta en ES. Los estudiantes con TEPT-C presentan dificultad para confiar en figuras de autoridad, desregulación en evaluaciones y conductas que el sistema interpreta como 'difíciles'. La intervención requiere trauma-informed approach en todo el equipo institucional." }
+];
+
+const chapterClass = { ansiedad:"ch-ansiedad", depresion:"ch-depresion", bipolar:"ch-bipolar", trauma:"ch-trauma", tdah:"ch-tdah", tca:"ch-tca", personalidad:"ch-personalidad", psicosis:"ch-psicosis", neuro:"ch-neuro", sueno:"ch-sueno", adapta:"ch-adapta", disruptivo:"ch-disruptivo" };
+const chapterLabelMap = { ansiedad:"Ansiedad", depresion:"Depresivo", bipolar:"Bipolar", trauma:"Trauma / Estrés", tdah:"Neurodesarrollo", tca:"Alimentación", personalidad:"Personalidad", psicosis:"Psicótico", neuro:"Neurológico", sueno:"Sueño", adapta:"Adaptación", disruptivo:"Disruptivo" };
+let dsmFilters = { chapter:"all", es:"all" };
+let dsmSearch = "";
+
+function renderDSM() {
+  const grid = document.getElementById("dsmGrid");
+  const q = dsmSearch.trim().toLowerCase();
+  const filtered = dsmData.filter(d => {
+    if (dsmFilters.chapter !== "all" && d.chapter !== dsmFilters.chapter) return false;
+    if (dsmFilters.es === "true" && !d.prevalence_es) return false;
+    if (q && !d.name.toLowerCase().includes(q) && !d.code.toLowerCase().includes(q) && !d.summary.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById("dsmCount").textContent = `${filtered.length} diagnóstico${filtered.length!==1?"s":""}`;
+  if (!filtered.length) { grid.innerHTML = '<div class="dsm-empty">Sin resultados para esta búsqueda.</div>'; return; }
+  grid.innerHTML = filtered.map(d => {
+    const cc = chapterClass[d.chapter] || "";
+    const cl = chapterLabelMap[d.chapter] || d.chapter;
+    const esFlag = d.prevalence_es ? '<span class="dsm-es-flag">Alta ES</span>' : '';
+    return `<div class="dsm-card" onclick="openDSMModal('${d.id}')">
+      ${esFlag}
+      <div class="dsm-card-header"><span class="dsm-chapter-badge ${cc}">${cl}</span><span class="dsm-prevalence">${d.prevalence.split(";")[0]}</span></div>
+      <p class="dsm-code">${d.code}</p>
+      <p class="dsm-name">${d.name}</p>
+      <p class="dsm-summary">${d.summary.substring(0,130)}…</p>
+      <div class="dsm-tags"><span class="dsm-tag">${d.dsm_version}</span></div>
+    </div>`;
+  }).join("");
+}
+
+function openDSMModal(id) {
+  const d = dsmData.find(x => x.id === id); if (!d) return;
+  const cc = chapterClass[d.chapter] || "", cl = chapterLabelMap[d.chapter] || d.chapter;
+  const criteriaHTML = d.criteria.map(c => `<li data-label="${c.label}">${c.text}</li>`).join("");
+  const specHTML = d.specifiers.map(s => `<span class="dsm-specifier">${s}</span>`).join("");
+  const theoryHTML = d.theory.filter(t => t.author).map(t => `<div class="dsm-author-link">📚 ${t.author} — <span style="font-weight:300;font-size:0.72rem;">${t.link}</span></div>`).join("");
+  const tx1 = d.tx_first.map(t => `<div class="dsm-tx-item first">${t}</div>`).join("");
+  const tx2 = d.tx_second.map(t => `<div class="dsm-tx-item second">${t}</div>`).join("");
+  const instr = d.instruments.map(i => `<span class="dsm-instrument">${i}</span>`).join("");
+  document.getElementById("modalBody").innerHTML = `
+    <div class="dsm-modal-top">
+      <p class="dsm-modal-code">${d.code} · ${d.dsm_version}</p>
+      <h2 class="dsm-modal-name">${d.name}</h2>
+      <div class="dsm-modal-meta"><span class="dsm-modal-badge dsm-chapter-badge ${cc}">${cl}</span><span style="font-size:0.8rem;color:rgba(245,240,232,0.4);">Prevalencia ES: ${d.prevalence}</span></div>
+    </div>
+    <p class="dsm-section-title">Resumen clínico</p>
+    <p style="font-size:0.88rem;color:rgba(245,240,232,0.65);line-height:1.65;">${d.summary}</p>
+    <p class="dsm-section-title">Criterios — ${d.dsm_version}</p>
+    <ul class="dsm-criteria-list">${criteriaHTML}</ul>
+    <p class="dsm-section-title">Especificadores</p>
+    <div class="dsm-specifiers">${specHTML}</div>
+    <p class="dsm-section-title">Diagnóstico diferencial</p>
+    <div class="dsm-diff">${d.differential}</div>
+    <p class="dsm-section-title">Marco teórico — autores vinculados</p>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">${theoryHTML}</div>
+    <p class="dsm-section-title">Tratamientos</p>
+    <div class="dsm-treatments"><div class="dsm-tx-col"><p class="dsm-tx-label first">Primera línea</p>${tx1}</div><div class="dsm-tx-col"><p class="dsm-tx-label second">Segunda línea</p>${tx2}</div></div>
+    <p class="dsm-section-title">Instrumentos de evaluación</p>
+    <div class="dsm-instruments-list">${instr}</div>
+    <p class="dsm-section-title">Contexto Educación Superior</p>
+    <div class="dsm-es-box"><strong>ES / Bienestar:</strong> ${d.es_context}</div>
+  `;
+  document.getElementById("modalContent").className = "modal dsm-modal";
+  document.getElementById("modalOverlay").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+document.querySelectorAll(".dsm-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const f = this.dataset.dsmf; dsmFilters[f] = this.dataset.dsmv;
+    document.querySelectorAll(`.dsm-btn[data-dsmf="${f}"]`).forEach(b => b.classList.remove("active"));
+    this.classList.add("active"); renderDSM();
+  });
+});
+document.getElementById("dsmSearch").addEventListener("input", function() { dsmSearch = this.value; renderDSM(); });
+const _origClose = closeModal;
+window.closeModal = function() { _origClose(); document.getElementById("modalContent").className = "modal"; };
+renderDSM();
+</script>
+</body>
+</html>
