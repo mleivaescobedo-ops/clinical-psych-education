@@ -22,7 +22,7 @@ jobs:
       - name: Generate summaries
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python scripts/generate_summary.py
+        run: python Scripts/generate_summary.py
       - run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
