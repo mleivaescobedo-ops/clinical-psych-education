@@ -24,8 +24,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python Scripts/generate_summary.py
       - run: |
+          mkdir -p applications/auto_generated
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add applications/auto_generated/
+          git add applications/auto_generated/ || true
           git diff --staged --quiet || git commit -m "auto: regenerate [skip ci]"
-          git push
+          git push || true
