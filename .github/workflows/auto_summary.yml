@@ -3,7 +3,7 @@ name: Auto-generate Educational Applications
 on:
   push:
     paths:
-      - 'authors/**.md'
+      - '**/*.md'
   schedule:
     - cron: '0 9 * * 1'
   workflow_dispatch:
