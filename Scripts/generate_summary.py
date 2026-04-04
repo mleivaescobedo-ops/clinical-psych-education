@@ -21,7 +21,7 @@ from datetime import datetime
 # ── Config ────────────────────────────────────────────────────────────────────
 MODEL = "claude-opus-4-5"
 MAX_TOKENS = 1200
-AUTHORS_PATH = Path("authors")
+AUTHORS_PATH = Path("Authors")
 OUTPUT_PATH = Path("applications/auto_generated")
 INDEX_PATH = Path("data/authors_index.json")
 
