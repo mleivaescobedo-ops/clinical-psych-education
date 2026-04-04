@@ -23,7 +23,7 @@ MODEL = "claude-opus-4-5"
 MAX_TOKENS = 1200
 AUTHORS_PATH = Path("Authors")
 OUTPUT_PATH = Path("applications/auto_generated")
-INDEX_PATH = Path("data/authors_index.json")
+INDEX_PATH = Path("Data/authors_index.json")
 
 SYSTEM_PROMPT = """Eres un experto en psicología educacional aplicada a educación superior chilena.
 Dado el perfil de un autor de psicología clínica, genera una síntesis de aplicación concreta en:
